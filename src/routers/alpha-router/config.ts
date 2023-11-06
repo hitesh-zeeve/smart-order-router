@@ -1,4 +1,4 @@
-import { ChainId } from '@uniswap/sdk-core';
+import { ChainId } from '@hitesh.sharma_/sdk-core';
 
 import { AlphaRouterConfig } from './alpha-router';
 
@@ -18,7 +18,7 @@ export const DEFAULT_ROUTING_CONFIG_BY_CHAIN = (
           topNTokenInOut: 5,
           topNSecondHop: 2,
           topNWithEachBaseToken: 2,
-          topNWithBaseToken: 6,
+          topNWithBaseToken: 6
         },
         v3PoolSelection: {
           topN: 2,
@@ -26,13 +26,13 @@ export const DEFAULT_ROUTING_CONFIG_BY_CHAIN = (
           topNTokenInOut: 2,
           topNSecondHop: 1,
           topNWithEachBaseToken: 3,
-          topNWithBaseToken: 3,
+          topNWithBaseToken: 3
         },
         maxSwapsPerPath: 3,
         minSplits: 1,
         maxSplits: 7,
         distributionPercent: 10,
-        forceCrossProtocol: false,
+        forceCrossProtocol: false
       };
     // Arbitrum calls have lower gas limits and tend to timeout more, which causes us to reduce the multicall
     // batch size and send more multicalls per quote. To reduce the amount of requests each quote sends, we
@@ -48,7 +48,7 @@ export const DEFAULT_ROUTING_CONFIG_BY_CHAIN = (
           topNTokenInOut: 5,
           topNSecondHop: 2,
           topNWithEachBaseToken: 2,
-          topNWithBaseToken: 6,
+          topNWithBaseToken: 6
         },
         v3PoolSelection: {
           topN: 2,
@@ -56,13 +56,13 @@ export const DEFAULT_ROUTING_CONFIG_BY_CHAIN = (
           topNTokenInOut: 2,
           topNSecondHop: 1,
           topNWithEachBaseToken: 3,
-          topNWithBaseToken: 2,
+          topNWithBaseToken: 2
         },
         maxSwapsPerPath: 2,
         minSplits: 1,
         maxSplits: 7,
         distributionPercent: 25,
-        forceCrossProtocol: false,
+        forceCrossProtocol: false
       };
     default:
       return {
@@ -72,7 +72,7 @@ export const DEFAULT_ROUTING_CONFIG_BY_CHAIN = (
           topNTokenInOut: 5,
           topNSecondHop: 2,
           topNWithEachBaseToken: 2,
-          topNWithBaseToken: 6,
+          topNWithBaseToken: 6
         },
         v3PoolSelection: {
           topN: 2,
@@ -80,13 +80,13 @@ export const DEFAULT_ROUTING_CONFIG_BY_CHAIN = (
           topNTokenInOut: 3,
           topNSecondHop: 1,
           topNWithEachBaseToken: 3,
-          topNWithBaseToken: 5,
+          topNWithBaseToken: 5
         },
         maxSwapsPerPath: 3,
         minSplits: 1,
         maxSplits: 7,
         distributionPercent: 5,
-        forceCrossProtocol: false,
+        forceCrossProtocol: false
       };
   }
 };

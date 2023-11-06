@@ -1,9 +1,9 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { TradeType } from '@uniswap/sdk-core';
+import { TradeType } from '@hitesh.sharma_/sdk-core';
 import {
   InsufficientInputAmountError,
-  InsufficientReservesError,
-} from '@uniswap/v2-sdk';
+  InsufficientReservesError
+} from '@hitesh.sharma_/v2-sdk';
 
 import { V2Route } from '../../routers/router';
 import { CurrencyAmount } from '../../util/amounts';
@@ -81,7 +81,7 @@ export class V2QuoteProvider implements IV2QuoteProvider {
 
             amountQuotes.push({
               amount,
-              quote: BigNumber.from(outputAmount.quotient.toString()),
+              quote: BigNumber.from(outputAmount.quotient.toString())
             });
           } else {
             let inputAmount = amount.wrapped;
@@ -93,7 +93,7 @@ export class V2QuoteProvider implements IV2QuoteProvider {
 
             amountQuotes.push({
               amount,
-              quote: BigNumber.from(inputAmount.quotient.toString()),
+              quote: BigNumber.from(inputAmount.quotient.toString())
             });
           }
         } catch (err) {
@@ -117,7 +117,7 @@ export class V2QuoteProvider implements IV2QuoteProvider {
       ) {
         debugStrs.push(
           `${[
-            routeToString(route),
+            routeToString(route)
           ]} Input: ${insufficientInputAmountErrorCount} Reserves: ${insufficientReservesErrorCount} }`
         );
       }
@@ -130,7 +130,7 @@ export class V2QuoteProvider implements IV2QuoteProvider {
     }
 
     return {
-      routesWithQuotes,
+      routesWithQuotes
     };
   }
 }

@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { BaseProvider } from '@ethersproject/providers';
-import { ChainId } from '@uniswap/sdk-core';
+import { ChainId } from '@hitesh.sharma_/sdk-core';
 import _ from 'lodash';
 import stats from 'stats-lite';
 
@@ -14,7 +14,7 @@ import {
   CallSameFunctionOnContractWithMultipleParams,
   CallSameFunctionOnMultipleContractsParams,
   IMulticallProvider,
-  Result,
+  Result
 } from './multicall-provider';
 
 export type UniswapMulticallConfig = {
@@ -67,7 +67,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
       contractInterface,
       functionName,
       functionParams,
-      providerConfig,
+      providerConfig
     } = params;
 
     const blockNumberOverride = providerConfig?.blockNumber ?? undefined;
@@ -82,7 +82,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
       return {
         target: address,
         callData,
-        gasLimit: this.gasLimitPerCall,
+        gasLimit: this.gasLimitPerCall
       };
     });
 
@@ -93,7 +93,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
 
     const { blockNumber, returnData: aggregateResults } =
       await this.multicallContract.callStatic.multicall(calls, {
-        blockTag: blockNumberOverride,
+        blockTag: blockNumberOverride
       });
 
     const results: Result<TReturn>[] = [];
@@ -109,7 +109,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
         );
         results.push({
           success: false,
-          returnData,
+          returnData
         });
         continue;
       }
@@ -119,7 +119,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
         result: contractInterface.decodeFunctionResult(
           fragment,
           returnData
-        ) as unknown as TReturn,
+        ) as unknown as TReturn
       });
     }
 
@@ -150,7 +150,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
       functionName,
       functionParams,
       additionalConfig,
-      providerConfig,
+      providerConfig
     } = params;
     const fragment = contractInterface.getFunction(functionName);
 
@@ -167,7 +167,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
       return {
         target: address,
         callData,
-        gasLimit: gasLimitPerCall,
+        gasLimit: gasLimitPerCall
       };
     });
 
@@ -178,7 +178,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
 
     const { blockNumber, returnData: aggregateResults } =
       await this.multicallContract.callStatic.multicall(calls, {
-        blockTag: blockNumberOverride,
+        blockTag: blockNumberOverride
       });
 
     const results: Result<TReturn>[] = [];
@@ -195,7 +195,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
         );
         results.push({
           success: false,
-          returnData,
+          returnData
         });
         continue;
       }
@@ -207,7 +207,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
         result: contractInterface.decodeFunctionResult(
           fragment,
           returnData
-        ) as unknown as TReturn,
+        ) as unknown as TReturn
       });
     }
 
@@ -218,7 +218,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
     return {
       blockNumber,
       results,
-      approxGasUsedPerSuccessCall: stats.percentile(gasUsedForSuccess, 99),
+      approxGasUsedPerSuccessCall: stats.percentile(gasUsedForSuccess, 99)
     };
   }
 
@@ -241,7 +241,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
       functionNames,
       functionParams,
       additionalConfig,
-      providerConfig,
+      providerConfig
     } = params;
 
     const gasLimitPerCall =
@@ -255,7 +255,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
       return {
         target: address,
         callData,
-        gasLimit: gasLimitPerCall,
+        gasLimit: gasLimitPerCall
       };
     });
 
@@ -266,7 +266,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
 
     const { blockNumber, returnData: aggregateResults } =
       await this.multicallContract.callStatic.multicall(calls, {
-        blockTag: blockNumberOverride,
+        blockTag: blockNumberOverride
       });
 
     const results: Result<TReturn>[] = [];
@@ -286,7 +286,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
         );
         results.push({
           success: false,
-          returnData,
+          returnData
         });
         continue;
       }
@@ -298,7 +298,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
         result: contractInterface.decodeFunctionResult(
           fragment,
           returnData
-        ) as unknown as TReturn,
+        ) as unknown as TReturn
       });
     }
 
@@ -313,7 +313,7 @@ export class UniswapMulticallProvider extends IMulticallProvider<UniswapMultical
     return {
       blockNumber,
       results,
-      approxGasUsedPerSuccessCall: stats.percentile(gasUsedForSuccess, 99),
+      approxGasUsedPerSuccessCall: stats.percentile(gasUsedForSuccess, 99)
     };
   }
 }

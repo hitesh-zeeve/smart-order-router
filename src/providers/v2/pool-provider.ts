@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Token } from '@uniswap/sdk-core';
-import { Pair } from '@uniswap/v2-sdk';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
+import { Pair } from '@hitesh.sharma_/v2-sdk';
 import retry, { Options as RetryOptions } from 'async-retry';
 import _ from 'lodash';
 
@@ -74,7 +74,7 @@ export class V2PoolProvider implements IV2PoolProvider {
     protected retryOptions: V2PoolRetryOptions = {
       retries: 2,
       minTimeout: 50,
-      maxTimeout: 500,
+      maxTimeout: 500
     }
   ) {}
 
@@ -107,7 +107,7 @@ export class V2PoolProvider implements IV2PoolProvider {
       `getPools called with ${tokenPairs.length} token pairs. Deduped down to ${poolAddressSet.size}`
     );
 
-    metric.putMetric('V2_RPC_POOL_RPC_CALL', 1, MetricLoggerUnit.None)
+    metric.putMetric('V2_RPC_POOL_RPC_CALL', 1, MetricLoggerUnit.None);
 
     const reservesResults = await this.getPoolsData<IReserves>(
       sortedPoolAddresses,
@@ -156,7 +156,7 @@ export class V2PoolProvider implements IV2PoolProvider {
           invalidPools: _.map(
             invalidPools,
             ([token0, token1]) => `${token0.symbol}/${token1.symbol}`
-          ),
+          )
         },
         `${invalidPools.length} pools invalid after checking their slot0 and liquidity results. Dropping.`
       );
@@ -173,7 +173,7 @@ export class V2PoolProvider implements IV2PoolProvider {
       },
       getPoolByAddress: (address: string): Pair | undefined =>
         poolAddressToPool[address],
-      getAllPools: (): Pair[] => Object.values(poolAddressToPool),
+      getAllPools: (): Pair[] => Object.values(poolAddressToPool)
     };
   }
 
@@ -213,7 +213,7 @@ export class V2PoolProvider implements IV2PoolProvider {
         addresses: poolAddresses,
         contractInterface: IUniswapV2Pair__factory.createInterface(),
         functionName: functionName,
-        providerConfig,
+        providerConfig
       });
     }, this.retryOptions);
 

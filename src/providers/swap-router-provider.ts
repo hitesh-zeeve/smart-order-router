@@ -1,5 +1,5 @@
-import { ApprovalTypes } from '@uniswap/router-sdk';
-import { ChainId, Currency, CurrencyAmount } from '@uniswap/sdk-core';
+import { ApprovalTypes } from '@hitesh.sharma_/router-sdk';
+import { ChainId, Currency, CurrencyAmount } from '@hitesh.sharma_/sdk-core';
 
 import { SwapRouter02__factory } from '../types/other/factories/SwapRouter02__factory';
 import { log, SWAP_ROUTER_02_ADDRESSES } from '../util';
@@ -44,12 +44,12 @@ export class SwapRouterProvider implements ISwapRouterProvider {
     const functionParams: [string, string][] = [
       [
         tokenInAmount.currency.wrapped.address,
-        tokenInAmount.quotient.toString(),
+        tokenInAmount.quotient.toString()
       ],
       [
         tokenOutAmount.currency.wrapped.address,
-        tokenOutAmount.quotient.toString(),
-      ],
+        tokenOutAmount.quotient.toString()
+      ]
     ];
 
     const tx =
@@ -60,7 +60,7 @@ export class SwapRouterProvider implements ISwapRouterProvider {
         address: SWAP_ROUTER_02_ADDRESSES(this.chainId),
         contractInterface: SwapRouter02__factory.createInterface(),
         functionName: 'getApprovalType',
-        functionParams,
+        functionParams
       });
 
     if (!tx.results[0]?.success || !tx.results[1]?.success) {
@@ -78,7 +78,7 @@ export class SwapRouterProvider implements ISwapRouterProvider {
 
     return {
       approvalTokenIn: approvalTokenIn[0],
-      approvalTokenOut: approvalTokenOut[0],
+      approvalTokenOut: approvalTokenOut[0]
     };
   }
 }

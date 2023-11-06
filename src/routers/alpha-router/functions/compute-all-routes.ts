@@ -1,6 +1,6 @@
-import { Token } from '@uniswap/sdk-core';
-import { Pair } from '@uniswap/v2-sdk';
-import { Pool } from '@uniswap/v3-sdk';
+import { Token } from '@hitesh.sharma_/sdk-core';
+import { Pair } from '@hitesh.sharma_/v2-sdk';
+import { Pool } from '@hitesh.sharma_/v3-sdk';
 
 import { log } from '../../../util/log';
 import { poolToString, routeToString } from '../../../util/routes';
@@ -131,7 +131,7 @@ export function computeAllRoutes<
   log.info(
     {
       routes: routes.map(routeToString),
-      pools: pools.map(poolToString),
+      pools: pools.map(poolToString)
     },
     `Computed ${routes.length} possible routes for type ${routes[0]?.protocol}.`
   );

@@ -1,4 +1,4 @@
-import { ChainId } from '@uniswap/sdk-core';
+import { ChainId } from '@hitesh.sharma_/sdk-core';
 import retry from 'async-retry';
 import Timeout from 'await-timeout';
 import axios from 'axios';
@@ -80,7 +80,7 @@ export class URISubgraphProvider<
             { err },
             `Failed to get pools from uri ${this.uri}. Retry attempt: ${retry}`
           );
-        },
+        }
       }
     );
 

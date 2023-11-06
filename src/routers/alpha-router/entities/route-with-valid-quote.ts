@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { Protocol } from '@uniswap/router-sdk';
-import { Token, TradeType } from '@uniswap/sdk-core';
-import { Pool } from '@uniswap/v3-sdk';
+import { Protocol } from '@hitesh.sharma_/router-sdk';
+import { Token, TradeType } from '@hitesh.sharma_/sdk-core';
+import { Pool } from '@hitesh.sharma_/v3-sdk';
 import _ from 'lodash';
 
 import { IV2PoolProvider } from '../../../providers/v2/pool-provider';
@@ -107,7 +107,7 @@ export class V2RouteWithValidQuote implements IV2RouteWithValidQuote {
     gasModel,
     quoteToken,
     tradeType,
-    v2PoolProvider,
+    v2PoolProvider
   }: V2RouteWithValidQuoteParams) {
     this.amount = amount;
     this.rawQuote = rawQuote;
@@ -204,7 +204,7 @@ export class V3RouteWithValidQuote implements IV3RouteWithValidQuote {
     gasModel,
     quoteToken,
     tradeType,
-    v3PoolProvider,
+    v3PoolProvider
   }: V3RouteWithValidQuoteParams) {
     this.amount = amount;
     this.rawQuote = rawQuote;
@@ -307,7 +307,7 @@ export class MixedRouteWithValidQuote implements IMixedRouteWithValidQuote {
     quoteToken,
     tradeType,
     v3PoolProvider,
-    v2PoolProvider,
+    v2PoolProvider
   }: MixedRouteWithValidQuoteParams) {
     this.amount = amount;
     this.rawQuote = rawQuote;

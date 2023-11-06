@@ -1,8 +1,13 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { Logger } from '@ethersproject/logger';
-import { SwapRouter, Trade } from '@uniswap/router-sdk';
-import { ChainId, Currency, Token, TradeType } from '@uniswap/sdk-core';
-import { FeeAmount, MethodParameters, Pool, Route } from '@uniswap/v3-sdk';
+import { SwapRouter, Trade } from '@hitesh.sharma_/router-sdk';
+import { ChainId, Currency, Token, TradeType } from '@hitesh.sharma_/sdk-core';
+import {
+  FeeAmount,
+  MethodParameters,
+  Pool,
+  Route
+} from '@hitesh.sharma_/v3-sdk';
 import _ from 'lodash';
 
 import { IOnChainQuoteProvider, RouteWithQuotes } from '../../providers';
@@ -10,7 +15,7 @@ import { IMulticallProvider } from '../../providers/multicall-provider';
 import {
   DAI_MAINNET,
   ITokenProvider,
-  USDC_MAINNET,
+  USDC_MAINNET
 } from '../../providers/token-provider';
 import { IV3PoolProvider } from '../../providers/v3/pool-provider';
 import { SWAP_ROUTER_02_ADDRESSES } from '../../util';
@@ -23,7 +28,7 @@ import { SwapOptionsSwapRouter02, SwapRoute, V3Route } from '../router';
 import {
   ADDITIONAL_BASES,
   BASES_TO_CHECK_TRADES_AGAINST,
-  CUSTOM_BASES,
+  CUSTOM_BASES
 } from './bases';
 
 export type LegacyRouterParams = {
@@ -58,7 +63,7 @@ export class LegacyRouter {
     multicall2Provider,
     poolProvider,
     quoteProvider,
-    tokenProvider,
+    tokenProvider
   }: LegacyRouterParams) {
     this.chainId = chainId;
     this.multicall2Provider = multicall2Provider;
@@ -140,10 +145,10 @@ export class LegacyRouter {
       methodParameters: swapConfig
         ? {
             ...this.buildMethodParameters(trade, swapConfig),
-            to: SWAP_ROUTER_02_ADDRESSES(this.chainId),
+            to: SWAP_ROUTER_02_ADDRESSES(this.chainId)
           }
         : undefined,
-      blockNumber: BigNumber.from(0),
+      blockNumber: BigNumber.from(0)
     };
   }
 
@@ -195,10 +200,10 @@ export class LegacyRouter {
       methodParameters: swapConfig
         ? {
             ...this.buildMethodParameters(trade, swapConfig),
-            to: SWAP_ROUTER_02_ADDRESSES(this.chainId),
+            to: SWAP_ROUTER_02_ADDRESSES(this.chainId)
           }
         : undefined,
-      blockNumber: BigNumber.from(0),
+      blockNumber: BigNumber.from(0)
     };
   }
 
@@ -213,7 +218,7 @@ export class LegacyRouter {
         [amountIn],
         routes,
         {
-          blockNumber: routingConfig?.blockNumber,
+          blockNumber: routingConfig?.blockNumber
         }
       );
 
@@ -245,7 +250,7 @@ export class LegacyRouter {
         [amountOut],
         routes,
         {
-          blockNumber: routingConfig?.blockNumber,
+          blockNumber: routingConfig?.blockNumber
         }
       );
     const bestQuote = await this.getBestQuote(
@@ -310,15 +315,15 @@ export class LegacyRouter {
           estimateGasCost: () => ({
             gasCostInToken: CurrencyAmount.fromRawAmount(quoteToken, 0),
             gasCostInUSD: CurrencyAmount.fromRawAmount(USDC_MAINNET, 0),
-            gasEstimate: BigNumber.from(0),
-          }),
+            gasEstimate: BigNumber.from(0)
+          })
         },
         sqrtPriceX96AfterList: [],
         initializedTicksCrossedList: [],
         quoterGasEstimate: BigNumber.from(0),
         tradeType: routeType,
         quoteToken,
-        v3PoolProvider: this.poolProvider,
+        v3PoolProvider: this.poolProvider
       });
     });
 
@@ -342,7 +347,7 @@ export class LegacyRouter {
       await this.getAllPossiblePairings(tokenIn, tokenOut);
 
     const poolAccessor = await this.poolProvider.getPools(tokenPairs, {
-      blockNumber: routingConfig?.blockNumber,
+      blockNumber: routingConfig?.blockNumber
     });
     const pools = poolAccessor.getAllPools();
 
@@ -396,7 +401,7 @@ export class LegacyRouter {
       // token B against all bases
       ...bases.map((base): [Token, Token] => [tokenOut, base]),
       // each base against all bases
-      ...basePairs,
+      ...basePairs
     ])
       .filter((tokens): tokens is [Token, Token] =>
         Boolean(tokens[0] && tokens[1])
@@ -422,7 +427,7 @@ export class LegacyRouter {
         return [
           [tokenA, tokenB, FeeAmount.LOW],
           [tokenA, tokenB, FeeAmount.MEDIUM],
-          [tokenA, tokenB, FeeAmount.HIGH],
+          [tokenA, tokenB, FeeAmount.HIGH]
         ];
       })
       .value();
@@ -502,11 +507,11 @@ export class LegacyRouter {
           {
             routev3: routeCurrency,
             inputAmount: amountCurrency,
-            outputAmount: quoteCurrency,
-          },
+            outputAmount: quoteCurrency
+          }
         ],
         v2Routes: [],
-        tradeType: tradeType,
+        tradeType: tradeType
       });
     } else {
       const quoteCurrency = CurrencyAmount.fromFractionalAmount(
@@ -532,11 +537,11 @@ export class LegacyRouter {
           {
             routev3: routeCurrency,
             inputAmount: quoteCurrency,
-            outputAmount: amountCurrency,
-          },
+            outputAmount: amountCurrency
+          }
         ],
         v2Routes: [],
-        tradeType: tradeType,
+        tradeType: tradeType
       });
     }
   }
@@ -550,7 +555,7 @@ export class LegacyRouter {
     const methodParameters = SwapRouter.swapCallParameters(trade, {
       recipient,
       slippageTolerance,
-      deadlineOrPreviousBlockhash: deadline,
+      deadlineOrPreviousBlockhash: deadline
       // ...(signatureData
       //   ? {
       //       inputTokenPermit:

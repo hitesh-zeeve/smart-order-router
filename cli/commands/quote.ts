@@ -1,11 +1,18 @@
 import { Logger } from '@ethersproject/logger';
 import { flags } from '@oclif/command';
-import { Protocol } from '@uniswap/router-sdk';
-import { Currency, Percent, TradeType } from '@uniswap/sdk-core';
+import { Protocol } from '@hitesh.sharma_/router-sdk';
+import { Currency, Percent, TradeType } from '@hitesh.sharma_/sdk-core';
 import dotenv from 'dotenv';
 import _ from 'lodash';
 
-import { ID_TO_CHAIN_ID, MapWithLowerCaseKey, nativeOnChain, parseAmount, SwapRoute, SwapType, } from '../../src';
+import {
+  ID_TO_CHAIN_ID,
+  MapWithLowerCaseKey,
+  nativeOnChain,
+  parseAmount,
+  SwapRoute,
+  SwapType
+} from '../../src';
 import { NATIVE_NAMES_BY_ID, TO_PROTOCOL } from '../../src/util';
 import { BaseCommand } from '../base-command';
 
@@ -31,9 +38,9 @@ export class Quote extends BaseCommand {
     forceCrossProtocol: flags.boolean({ required: false, default: false }),
     forceMixedRoutes: flags.boolean({
       required: false,
-      default: false,
+      default: false
     }),
-    simulate: flags.boolean({ required: false, default: false }),
+    simulate: flags.boolean({ required: false, default: false })
   };
 
   async run() {
@@ -62,7 +69,7 @@ export class Quote extends BaseCommand {
       protocols: protocolsStr,
       forceCrossProtocol,
       forceMixedRoutes,
-      simulate,
+      simulate
     } = flags;
 
     const topNSecondHopForTokenAddress = new MapWithLowerCaseKey();
@@ -71,7 +78,8 @@ export class Quote extends BaseCommand {
         const entryParts = entry.split('|');
         if (entryParts.length != 2) {
           throw new Error(
-            'flag --topNSecondHopForTokenAddressRaw must be in format tokenAddress|topN,...');
+            'flag --topNSecondHopForTokenAddressRaw must be in format tokenAddress|topN,...'
+          );
         }
         const topNForTokenAddress: number = Number(entryParts[1]!);
         topNSecondHopForTokenAddress.set(entryParts[0]!, topNForTokenAddress);
@@ -105,16 +113,16 @@ export class Quote extends BaseCommand {
     const tokenIn: Currency = NATIVE_NAMES_BY_ID[chainId]!.includes(tokenInStr)
       ? nativeOnChain(chainId)
       : (await tokenProvider.getTokens([tokenInStr])).getTokenByAddress(
-        tokenInStr
-      )!;
+          tokenInStr
+        )!;
 
     const tokenOut: Currency = NATIVE_NAMES_BY_ID[chainId]!.includes(
       tokenOutStr
     )
       ? nativeOnChain(chainId)
       : (await tokenProvider.getTokens([tokenOutStr])).getTokenByAddress(
-        tokenOutStr
-      )!;
+          tokenOutStr
+        )!;
 
     let swapRoutes: SwapRoute | null;
     if (exactIn) {
@@ -125,12 +133,12 @@ export class Quote extends BaseCommand {
         TradeType.EXACT_INPUT,
         recipient
           ? {
-            type: SwapType.UNIVERSAL_ROUTER,
-            deadlineOrPreviousBlockhash: 10000000000000,
-            recipient,
-            slippageTolerance: new Percent(5, 100),
-            simulate: simulate ? { fromAddress: recipient } : undefined,
-          }
+              type: SwapType.UNIVERSAL_ROUTER,
+              deadlineOrPreviousBlockhash: 10000000000000,
+              recipient,
+              slippageTolerance: new Percent(5, 100),
+              simulate: simulate ? { fromAddress: recipient } : undefined
+            }
           : undefined,
         {
           blockNumber: this.blockNumber,
@@ -142,7 +150,7 @@ export class Quote extends BaseCommand {
             topNWithEachBaseToken,
             topNWithBaseToken,
             topNWithBaseTokenInSet,
-            topNDirectSwaps,
+            topNDirectSwaps
           },
           maxSwapsPerPath,
           minSplits,
@@ -150,7 +158,7 @@ export class Quote extends BaseCommand {
           distributionPercent,
           protocols,
           forceCrossProtocol,
-          forceMixedRoutes,
+          forceMixedRoutes
         }
       );
     } else {
@@ -161,11 +169,11 @@ export class Quote extends BaseCommand {
         TradeType.EXACT_OUTPUT,
         recipient
           ? {
-            type: SwapType.SWAP_ROUTER_02,
-            deadline: 100,
-            recipient,
-            slippageTolerance: new Percent(5, 10_000),
-          }
+              type: SwapType.SWAP_ROUTER_02,
+              deadline: 100,
+              recipient,
+              slippageTolerance: new Percent(5, 10_000)
+            }
           : undefined,
         {
           blockNumber: this.blockNumber - 10,
@@ -177,7 +185,7 @@ export class Quote extends BaseCommand {
             topNWithEachBaseToken,
             topNWithBaseToken,
             topNWithBaseTokenInSet,
-            topNDirectSwaps,
+            topNDirectSwaps
           },
           maxSwapsPerPath,
           minSplits,
@@ -185,7 +193,7 @@ export class Quote extends BaseCommand {
           distributionPercent,
           protocols,
           forceCrossProtocol,
-          forceMixedRoutes,
+          forceMixedRoutes
         }
       );
     }
@@ -209,7 +217,7 @@ export class Quote extends BaseCommand {
       quote,
       quoteGasAdjusted,
       route: routeAmounts,
-      simulationStatus,
+      simulationStatus
     } = swapRoutes;
 
     this.logSwapResults(

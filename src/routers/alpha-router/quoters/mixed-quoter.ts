@@ -1,4 +1,4 @@
-import { ChainId, Currency, Token, TradeType } from '@uniswap/sdk-core';
+import { ChainId, Currency, Token, TradeType } from '@hitesh.sharma_/sdk-core';
 import _ from 'lodash';
 
 import {
@@ -12,12 +12,21 @@ import {
   IV3SubgraphProvider,
   TokenValidationResult
 } from '../../../providers';
-import { CurrencyAmount, log, metric, MetricLoggerUnit, routeToString } from '../../../util';
+import {
+  CurrencyAmount,
+  log,
+  metric,
+  MetricLoggerUnit,
+  routeToString
+} from '../../../util';
 import { MixedRoute } from '../../router';
 import { AlphaRouterConfig } from '../alpha-router';
 import { MixedRouteWithValidQuote } from '../entities';
 import { computeAllMixedRoutes } from '../functions/compute-all-routes';
-import { CandidatePoolsBySelectionCriteria, getMixedRouteCandidatePools } from '../functions/get-candidate-pools';
+import {
+  CandidatePoolsBySelectionCriteria,
+  getMixedRouteCandidatePools
+} from '../functions/get-candidate-pools';
 import { IGasModel } from '../gas-models';
 
 import { BaseQuoter } from './base-quoter';
@@ -41,7 +50,12 @@ export class MixedQuoter extends BaseQuoter<MixedRoute> {
     blockedTokenListProvider?: ITokenListProvider,
     tokenValidatorProvider?: ITokenValidatorProvider
   ) {
-    super(tokenProvider, chainId, blockedTokenListProvider, tokenValidatorProvider);
+    super(
+      tokenProvider,
+      chainId,
+      blockedTokenListProvider,
+      tokenValidatorProvider
+    );
     this.v3SubgraphProvider = v3SubgraphProvider;
     this.v3PoolProvider = v3PoolProvider;
     this.v2SubgraphProvider = v2SubgraphProvider;
@@ -62,7 +76,7 @@ export class MixedQuoter extends BaseQuoter<MixedRoute> {
     const {
       V2poolAccessor,
       V3poolAccessor,
-      candidatePools: mixedRouteCandidatePools,
+      candidatePools: mixedRouteCandidatePools
     } = await getMixedRouteCandidatePools({
       tokenIn,
       tokenOut,
@@ -74,7 +88,7 @@ export class MixedQuoter extends BaseQuoter<MixedRoute> {
       v3subgraphProvider: this.v3SubgraphProvider,
       v2subgraphProvider: this.v2SubgraphProvider,
       routingConfig,
-      chainId: this.chainId,
+      chainId: this.chainId
     });
 
     const V3poolsRaw = V3poolAccessor.getAllPools();
@@ -142,7 +156,9 @@ export class MixedQuoter extends BaseQuoter<MixedRoute> {
   ): Promise<GetQuotesResult> {
     log.info('Starting to get mixed quotes');
     if (gasModel === undefined) {
-      throw new Error('GasModel for MixedRouteWithValidQuote is required to getQuotes');
+      throw new Error(
+        'GasModel for MixedRouteWithValidQuote is required to getQuotes'
+      );
     }
     if (routes.length == 0) {
       return { routesWithValidQuotes: [], candidatePools };
@@ -159,7 +175,7 @@ export class MixedQuoter extends BaseQuoter<MixedRoute> {
     );
 
     const { routesWithQuotes } = await quoteFn<MixedRoute>(amounts, routes, {
-      blockNumber: routingConfig.blockNumber,
+      blockNumber: routingConfig.blockNumber
     });
 
     metric.putMetric(
@@ -189,7 +205,7 @@ export class MixedQuoter extends BaseQuoter<MixedRoute> {
           amount,
           sqrtPriceX96AfterList,
           initializedTicksCrossedList,
-          gasEstimate,
+          gasEstimate
         } = amountQuote;
 
         if (
@@ -201,7 +217,7 @@ export class MixedQuoter extends BaseQuoter<MixedRoute> {
           log.debug(
             {
               route: routeToString(route),
-              amountQuote,
+              amountQuote
             },
             'Dropping a null mixed quote for route.'
           );
@@ -220,7 +236,7 @@ export class MixedQuoter extends BaseQuoter<MixedRoute> {
           quoteToken,
           tradeType,
           v3PoolProvider: this.v3PoolProvider,
-          v2PoolProvider: this.v2PoolProvider,
+          v2PoolProvider: this.v2PoolProvider
         });
 
         routesWithValidQuotes.push(routeWithValidQuote);
@@ -232,5 +248,4 @@ export class MixedQuoter extends BaseQuoter<MixedRoute> {
       candidatePools
     };
   }
-
 }

@@ -1,9 +1,9 @@
 import { MaxUint256 } from '@ethersproject/constants';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { ChainId } from '@uniswap/sdk-core';
+import { ChainId } from '@hitesh.sharma_/sdk-core';
 import {
   PERMIT2_ADDRESS,
-  UNIVERSAL_ROUTER_ADDRESS,
+  UNIVERSAL_ROUTER_ADDRESS
 } from '@uniswap/universal-router-sdk';
 import axios from 'axios';
 import { BigNumber } from 'ethers/lib/ethers';
@@ -15,7 +15,7 @@ import { log, MAX_UINT160, SWAP_ROUTER_02_ADDRESSES } from '../util';
 import { APPROVE_TOKEN_FOR_TRANSFER } from '../util/callData';
 import {
   calculateGasUsed,
-  initSwapRouteFromExisting,
+  initSwapRouteFromExisting
 } from '../util/gas-factory-helpers';
 
 import { EthEstimateGasSimulator } from './eth-estimate-gas-provider';
@@ -23,7 +23,7 @@ import { ProviderConfig } from './provider';
 import {
   SimulationResult,
   SimulationStatus,
-  Simulator,
+  Simulator
 } from './simulation-provider';
 import { IV2PoolProvider } from './v2/pool-provider';
 import { ArbitrumGasData, OptimismGasData } from './v3/gas-data-provider';
@@ -186,7 +186,7 @@ export class TenderlySimulator extends Simulator {
         fromAddress: fromAddress,
         chainId: chainId,
         tokenInAddress: tokenIn.address,
-        router: swapOptions.type,
+        router: swapOptions.type
       },
       'Simulating transaction on Tenderly'
     );
@@ -212,7 +212,7 @@ export class TenderlySimulator extends Simulator {
           tokenIn.address,
           UNIVERSAL_ROUTER_ADDRESS(this.chainId),
           MAX_UINT160,
-          Math.floor(new Date().getTime() / 1000) + 10000000,
+          Math.floor(new Date().getTime() / 1000) + 10000000
         ]);
 
       const approvePermit2 = {
@@ -221,7 +221,7 @@ export class TenderlySimulator extends Simulator {
         input: approvePermit2Calldata,
         to: tokenIn.address,
         value: '0',
-        from: fromAddress,
+        from: fromAddress
       };
 
       const approveUniversalRouter = {
@@ -230,7 +230,7 @@ export class TenderlySimulator extends Simulator {
         input: approveUniversalRouterCallData,
         to: PERMIT2_ADDRESS,
         value: '0',
-        from: fromAddress,
+        from: fromAddress
       };
 
       const swap = {
@@ -244,17 +244,17 @@ export class TenderlySimulator extends Simulator {
         block_number:
           chainId == ChainId.ARBITRUM_ONE && blockNumber
             ? blockNumber - 5
-            : undefined,
+            : undefined
       };
 
       const body = {
         simulations: [approvePermit2, approveUniversalRouter, swap],
-        estimate_gas: true,
+        estimate_gas: true
       };
       const opts = {
         headers: {
-          'X-Access-Key': this.tenderlyAccessKey,
-        },
+          'X-Access-Key': this.tenderlyAccessKey
+        }
       };
       const url = TENDERLY_BATCH_SIMULATE_API(
         this.tenderlyBaseUrl,
@@ -294,7 +294,7 @@ export class TenderlySimulator extends Simulator {
           approvePermit2Gas: resp.simulation_results[0].transaction.gas,
           approveUniversalRouterGas: resp.simulation_results[1].transaction.gas,
           swapGas: resp.simulation_results[2].transaction.gas,
-          swapWithMultiplier: estimatedGasUsed.toString(),
+          swapWithMultiplier: estimatedGasUsed.toString()
         },
         'Successfully Simulated Approvals + Swap via Tenderly for Universal Router. Gas used.'
       );
@@ -303,7 +303,7 @@ export class TenderlySimulator extends Simulator {
         {
           body,
           swapSimulation: resp.simulation_results[2].simulation,
-          swapTransaction: resp.simulation_results[2].transaction,
+          swapTransaction: resp.simulation_results[2].transaction
         },
         'Successful Tenderly Swap Simulation for Universal Router'
       );
@@ -314,7 +314,7 @@ export class TenderlySimulator extends Simulator {
         estimate_gas: true,
         to: tokenIn.address,
         value: '0',
-        from: fromAddress,
+        from: fromAddress
       };
 
       const swap = {
@@ -328,14 +328,14 @@ export class TenderlySimulator extends Simulator {
         block_number:
           chainId == ChainId.ARBITRUM_ONE && blockNumber
             ? blockNumber - 5
-            : undefined,
+            : undefined
       };
 
       const body = { simulations: [approve, swap] };
       const opts = {
         headers: {
-          'X-Access-Key': this.tenderlyAccessKey,
-        },
+          'X-Access-Key': this.tenderlyAccessKey
+        }
       };
 
       const url = TENDERLY_BATCH_SIMULATE_API(
@@ -377,7 +377,7 @@ export class TenderlySimulator extends Simulator {
           swapGasUsed: resp.simulation_results[1].transaction.gas_used,
           approveGas: resp.simulation_results[0].transaction.gas,
           swapGas: resp.simulation_results[1].transaction.gas,
-          swapWithMultiplier: estimatedGasUsed.toString(),
+          swapWithMultiplier: estimatedGasUsed.toString()
         },
         'Successfully Simulated Approval + Swap via Tenderly for SwapRouter02. Gas used.'
       );
@@ -386,7 +386,7 @@ export class TenderlySimulator extends Simulator {
         {
           body,
           swapTransaction: resp.simulation_results[1].transaction,
-          swapSimulation: resp.simulation_results[1].simulation,
+          swapSimulation: resp.simulation_results[1].simulation
         },
         'Successful Tenderly Swap Simulation for SwapRouter02'
       );
@@ -397,7 +397,7 @@ export class TenderlySimulator extends Simulator {
     const {
       estimatedGasUsedUSD,
       estimatedGasUsedQuoteToken,
-      quoteGasAdjusted,
+      quoteGasAdjusted
     } = await calculateGasUsed(
       chainId,
       swapRoute,
@@ -417,14 +417,14 @@ export class TenderlySimulator extends Simulator {
         estimatedGasUsedQuoteToken,
         estimatedGasUsedUSD
       ),
-      simulationStatus: SimulationStatus.Succeeded,
+      simulationStatus: SimulationStatus.Succeeded
     };
   }
 
   private logTenderlyErrorResponse(resp: TenderlyResponseUniversalRouter) {
     log.info(
       {
-        resp,
+        resp
       },
       'Failed to Simulate on Tenderly'
     );
@@ -433,7 +433,7 @@ export class TenderlySimulator extends Simulator {
         err:
           resp.simulation_results.length >= 1
             ? resp.simulation_results[0].transaction
-            : {},
+            : {}
       },
       'Failed to Simulate on Tenderly #1 Transaction'
     );
@@ -442,7 +442,7 @@ export class TenderlySimulator extends Simulator {
         err:
           resp.simulation_results.length >= 1
             ? resp.simulation_results[0].simulation
-            : {},
+            : {}
       },
       'Failed to Simulate on Tenderly #1 Simulation'
     );
@@ -451,7 +451,7 @@ export class TenderlySimulator extends Simulator {
         err:
           resp.simulation_results.length >= 2
             ? resp.simulation_results[1].transaction
-            : {},
+            : {}
       },
       'Failed to Simulate on Tenderly #2 Transaction'
     );
@@ -460,7 +460,7 @@ export class TenderlySimulator extends Simulator {
         err:
           resp.simulation_results.length >= 2
             ? resp.simulation_results[1].simulation
-            : {},
+            : {}
       },
       'Failed to Simulate on Tenderly #2 Simulation'
     );
@@ -469,7 +469,7 @@ export class TenderlySimulator extends Simulator {
         err:
           resp.simulation_results.length >= 3
             ? resp.simulation_results[2].transaction
-            : {},
+            : {}
       },
       'Failed to Simulate on Tenderly #3 Transaction'
     );
@@ -478,7 +478,7 @@ export class TenderlySimulator extends Simulator {
         err:
           resp.simulation_results.length >= 3
             ? resp.simulation_results[2].simulation
-            : {},
+            : {}
       },
       'Failed to Simulate on Tenderly #3 Simulation'
     );

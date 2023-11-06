@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Token } from '@uniswap/sdk-core';
-import { Pair } from '@uniswap/v2-sdk';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
+import { Pair } from '@hitesh.sharma_/v2-sdk';
 import _ from 'lodash';
 
 import { IV2PoolProvider } from '../../../../providers/v2/pool-provider';
@@ -11,7 +11,7 @@ import {
   BuildV2GasModelFactoryType,
   IGasModel,
   IV2GasModelFactory,
-  usdGasTokensByChain,
+  usdGasTokensByChain
 } from '../gas-model';
 
 // Constant cost for doing any swap regardless of pools.
@@ -46,7 +46,7 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
     chainId,
     gasPriceWei,
     poolProvider,
-    token,
+    token
   }: BuildV2GasModelFactoryType): Promise<IGasModel<V2RouteWithValidQuote>> {
     if (token.equals(WRAPPED_NATIVE_CURRENCY[chainId]!)) {
       const usdPool: Pair = await this.getHighestLiquidityUSDPool(
@@ -76,9 +76,9 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
           return {
             gasEstimate: gasUse,
             gasCostInToken: gasCostInEth,
-            gasCostInUSD: gasCostInTermsOfUSD,
+            gasCostInUSD: gasCostInTermsOfUSD
           };
-        },
+        }
       };
     }
 
@@ -117,7 +117,7 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
           return {
             gasEstimate: gasUse,
             gasCostInToken: CurrencyAmount.fromRawAmount(token, 0),
-            gasCostInUSD: CurrencyAmount.fromRawAmount(usdToken, 0),
+            gasCostInUSD: CurrencyAmount.fromRawAmount(usdToken, 0)
           };
         }
 
@@ -138,7 +138,7 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
             {
               ethTokenPriceBase: ethTokenPrice.baseCurrency,
               ethTokenPriceQuote: ethTokenPrice.quoteCurrency,
-              gasCostInEth: gasCostInEth.currency,
+              gasCostInEth: gasCostInEth.currency
             },
             'Debug eth price token issue'
           );
@@ -162,7 +162,7 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
             {
               usdT1: usdPool.token0.symbol,
               usdT2: usdPool.token1.symbol,
-              gasCostInEthToken: gasCostInEth.currency.symbol,
+              gasCostInEthToken: gasCostInEth.currency.symbol
             },
             'Failed to compute USD gas price'
           );
@@ -172,9 +172,9 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
         return {
           gasEstimate: gasUse,
           gasCostInToken: gasCostInTermsOfQuoteToken,
-          gasCostInUSD: gasCostInTermsOfUSD!,
+          gasCostInUSD: gasCostInTermsOfUSD!
         };
-      },
+      }
     };
   }
 
@@ -214,7 +214,7 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
           weth,
           token,
           reserve0: pool?.reserve0.toExact(),
-          reserve1: pool?.reserve1.toExact(),
+          reserve1: pool?.reserve1.toExact()
         },
         `Could not find a valid WETH pool with ${token.symbol} for computing gas costs.`
       );
@@ -239,7 +239,7 @@ export class V2HeuristicGasModelFactory extends IV2GasModelFactory {
 
     const usdPools = _.map<Token, [Token, Token]>(usdTokens, (usdToken) => [
       usdToken,
-      WRAPPED_NATIVE_CURRENCY[chainId]!,
+      WRAPPED_NATIVE_CURRENCY[chainId]!
     ]);
     const poolAccessor = await poolProvider.getPools(usdPools);
     const poolsRaw = poolAccessor.getAllPools();

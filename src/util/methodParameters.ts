@@ -2,15 +2,15 @@ import {
   MixedRouteSDK,
   Protocol,
   SwapRouter as SwapRouter02,
-  Trade,
-} from '@uniswap/router-sdk';
-import { ChainId, Currency, TradeType } from '@uniswap/sdk-core';
+  Trade
+} from '@hitesh.sharma_/router-sdk';
+import { ChainId, Currency, TradeType } from '@hitesh.sharma_/sdk-core';
 import {
   SwapRouter as UniveralRouter,
-  UNIVERSAL_ROUTER_ADDRESS,
+  UNIVERSAL_ROUTER_ADDRESS
 } from '@uniswap/universal-router-sdk';
-import { Route as V2RouteRaw } from '@uniswap/v2-sdk';
-import { Route as V3RouteRaw } from '@uniswap/v3-sdk';
+import { Route as V2RouteRaw } from '@hitesh.sharma_/v2-sdk';
+import { Route as V3RouteRaw } from '@hitesh.sharma_/v3-sdk';
 import _ from 'lodash';
 
 import {
@@ -22,7 +22,7 @@ import {
   SwapOptions,
   SwapType,
   V2RouteWithValidQuote,
-  V3RouteWithValidQuote,
+  V3RouteWithValidQuote
 } from '..';
 
 export function buildTrade<TTradeType extends TradeType>(
@@ -81,7 +81,7 @@ export function buildTrade<TTradeType extends TradeType>(
         return {
           routev3: routeRaw,
           inputAmount: amountCurrency,
-          outputAmount: quoteCurrency,
+          outputAmount: quoteCurrency
         };
       } else {
         const quoteCurrency = CurrencyAmount.fromFractionalAmount(
@@ -105,7 +105,7 @@ export function buildTrade<TTradeType extends TradeType>(
         return {
           routev3: routeCurrency,
           inputAmount: quoteCurrency,
-          outputAmount: amountCurrency,
+          outputAmount: amountCurrency
         };
       }
     }
@@ -147,7 +147,7 @@ export function buildTrade<TTradeType extends TradeType>(
         return {
           routev2: routeV2SDK,
           inputAmount: amountCurrency,
-          outputAmount: quoteCurrency,
+          outputAmount: quoteCurrency
         };
       } else {
         const quoteCurrency = CurrencyAmount.fromFractionalAmount(
@@ -171,7 +171,7 @@ export function buildTrade<TTradeType extends TradeType>(
         return {
           routev2: routeV2SDK,
           inputAmount: quoteCurrency,
-          outputAmount: amountCurrency,
+          outputAmount: amountCurrency
         };
       }
     }
@@ -218,7 +218,7 @@ export function buildTrade<TTradeType extends TradeType>(
       return {
         mixedRoute: routeRaw,
         inputAmount: amountCurrency,
-        outputAmount: quoteCurrency,
+        outputAmount: quoteCurrency
       };
     }
   );
@@ -236,7 +236,7 @@ export function buildSwapMethodParameters(
   if (swapConfig.type == SwapType.UNIVERSAL_ROUTER) {
     return {
       ...UniveralRouter.swapERC20CallParameters(trade, swapConfig),
-      to: UNIVERSAL_ROUTER_ADDRESS(chainId),
+      to: UNIVERSAL_ROUTER_ADDRESS(chainId)
     };
   } else if (swapConfig.type == SwapType.SWAP_ROUTER_02) {
     const { recipient, slippageTolerance, deadline, inputTokenPermit } =
@@ -247,9 +247,9 @@ export function buildSwapMethodParameters(
         recipient,
         slippageTolerance,
         deadlineOrPreviousBlockhash: deadline,
-        inputTokenPermit,
+        inputTokenPermit
       }),
-      to: SWAP_ROUTER_02_ADDRESSES(chainId),
+      to: SWAP_ROUTER_02_ADDRESSES(chainId)
     };
   }
 

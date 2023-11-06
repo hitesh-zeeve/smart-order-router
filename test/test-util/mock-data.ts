@@ -1,8 +1,8 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
 import { TokenList } from '@uniswap/token-lists';
-import { Pair } from '@uniswap/v2-sdk';
-import { encodeSqrtRatioX96, FeeAmount, Pool } from '@uniswap/v3-sdk';
+import { Pair } from '@hitesh.sharma_/v2-sdk';
+import { encodeSqrtRatioX96, FeeAmount, Pool } from '@hitesh.sharma_/v3-sdk';
 import _ from 'lodash';
 import {
   AlphaRouterConfig,
@@ -15,7 +15,7 @@ import {
   V3PoolAccessor,
   V3SubgraphPool,
   WBTC_MAINNET as WBTC,
-  WRAPPED_NATIVE_CURRENCY,
+  WRAPPED_NATIVE_CURRENCY
 } from '../../src';
 import { V2PoolAccessor } from '../../src/providers/v2/pool-provider';
 
@@ -30,7 +30,7 @@ export const mockRoutingConfig: AlphaRouterConfig = {
     topNTokenInOut: 0,
     topNSecondHop: 0,
     topNWithEachBaseToken: 0,
-    topNWithBaseToken: 0,
+    topNWithBaseToken: 0
   },
   v2PoolSelection: {
     topN: 0,
@@ -38,13 +38,13 @@ export const mockRoutingConfig: AlphaRouterConfig = {
     topNTokenInOut: 0,
     topNSecondHop: 0,
     topNWithEachBaseToken: 0,
-    topNWithBaseToken: 0,
+    topNWithBaseToken: 0
   },
   maxSwapsPerPath: 3,
   minSplits: 1,
   maxSplits: 4,
   distributionPercent: 5,
-  forceCrossProtocol: false,
+  forceCrossProtocol: false
 };
 
 // Mock 0 decimal token
@@ -185,13 +185,13 @@ export const poolToV3SubgraphPool = (
     feeTier: pool.fee.toString(),
     liquidity: pool.liquidity.toString(),
     token0: {
-      id: pool.token0.address,
+      id: pool.token0.address
     },
     token1: {
-      id: pool.token1.address,
+      id: pool.token1.address
     },
     tvlETH: parseFloat(pool.liquidity.toString()),
-    tvlUSD: parseFloat(pool.liquidity.toString()),
+    tvlUSD: parseFloat(pool.liquidity.toString())
   };
 };
 
@@ -202,14 +202,14 @@ export const pairToV2SubgraphPool = (
   return {
     id: idx.toString(),
     token0: {
-      id: pool.token0.address,
+      id: pool.token0.address
     },
     token1: {
-      id: pool.token1.address,
+      id: pool.token1.address
     },
     reserve: 1000,
     supply: 100,
-    reserveUSD: 100,
+    reserveUSD: 100
   };
 };
 
@@ -231,7 +231,7 @@ export const buildMockV3PoolAccessor: (pools: Pool[]) => V3PoolAccessor = (
         (p) =>
           Pool.getAddress(p.token0, p.token1, p.fee) ==
           Pool.getAddress(tokenA, tokenB, fee)
-      ),
+      )
   };
 };
 
@@ -252,7 +252,7 @@ export const buildMockV2PoolAccessor: (pools: Pair[]) => V2PoolAccessor = (
         pools,
         (p) =>
           Pair.getAddress(p.token0, p.token1) == Pair.getAddress(tokenA, tokenB)
-      ),
+      )
   };
 };
 
@@ -264,7 +264,7 @@ export const buildMockTokenAccessor: (tokens: Token[]) => TokenAccessor = (
     getTokenByAddress: (address) =>
       _.find(tokens, (t) => t.address.toLowerCase() == address.toLowerCase()),
     getTokenBySymbol: (symbol) =>
-      _.find(tokens, (t) => t.symbol!.toLowerCase() == symbol.toLowerCase()),
+      _.find(tokens, (t) => t.symbol!.toLowerCase() == symbol.toLowerCase())
   };
 };
 
@@ -274,7 +274,7 @@ export const mockTokenList: TokenList = {
   version: {
     major: 1,
     minor: 0,
-    patch: 0,
+    patch: 0
   },
   tags: {},
   logoURI: 'ipfs://QmNa8mQkrNKp1WEEeGjFezDmDeodkWRevGFN8JCV7b4Xir',
@@ -286,7 +286,7 @@ export const mockTokenList: TokenList = {
       symbol: 'USDC',
       decimals: 6,
       chainId: 1,
-      logoURI: '',
+      logoURI: ''
     },
     {
       name: 'USDT',
@@ -294,7 +294,7 @@ export const mockTokenList: TokenList = {
       symbol: 'USDT',
       decimals: 6,
       chainId: 1,
-      logoURI: '',
+      logoURI: ''
     },
     {
       name: 'DAI',
@@ -302,7 +302,7 @@ export const mockTokenList: TokenList = {
       symbol: 'DAI',
       decimals: 18,
       chainId: 1,
-      logoURI: '',
+      logoURI: ''
     },
     {
       name: 'USDT',
@@ -310,7 +310,7 @@ export const mockTokenList: TokenList = {
       symbol: 'USDT',
       decimals: 18,
       chainId: 2,
-      logoURI: '',
+      logoURI: ''
     },
     {
       name: 'WBTC',
@@ -318,7 +318,7 @@ export const mockTokenList: TokenList = {
       symbol: 'WBTC',
       decimals: 18,
       chainId: 777,
-      logoURI: '',
-    },
-  ],
+      logoURI: ''
+    }
+  ]
 };

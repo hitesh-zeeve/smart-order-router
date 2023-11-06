@@ -1,4 +1,4 @@
-import { Fraction } from '@uniswap/sdk-core';
+import { Fraction } from '@hitesh.sharma_/sdk-core';
 
 import { CurrencyAmount } from '../../../util/amounts';
 

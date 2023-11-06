@@ -1,10 +1,10 @@
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
 import _ from 'lodash';
 import sinon from 'sinon';
 import {
   CachingTokenListProvider,
   NodeJSCache,
-  USDC_MAINNET as USDC,
+  USDC_MAINNET as USDC
 } from '../../../src';
 import { mockTokenList } from '../../test-util/mock-data';
 

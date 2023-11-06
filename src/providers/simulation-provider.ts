@@ -1,22 +1,23 @@
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { ChainId, TradeType } from '@uniswap/sdk-core';
+import { ChainId, TradeType } from '@hitesh.sharma_/sdk-core';
 import { PERMIT2_ADDRESS } from '@uniswap/universal-router-sdk';
 import { BigNumber } from 'ethers/lib/ethers';
 
 import { SwapOptions, SwapRoute, SwapType } from '../routers';
 import { Erc20__factory } from '../types/other/factories/Erc20__factory';
 import { Permit2__factory } from '../types/other/factories/Permit2__factory';
-import {
-  CurrencyAmount,
-  log,
-  SWAP_ROUTER_02_ADDRESSES,
-} from '../util';
+import { CurrencyAmount, log, SWAP_ROUTER_02_ADDRESSES } from '../util';
 
 import { ProviderConfig } from './provider';
 import { ArbitrumGasData, OptimismGasData } from './v3/gas-data-provider';
 
 export type SimulationResult = {
-  transaction: { hash: string; gas_used: number; gas: number; error_message: string };
+  transaction: {
+    hash: string;
+    gas_used: number;
+    gas: number;
+    error_message: string;
+  };
   simulation: { state_overrides: Record<string, unknown> };
 };
 
@@ -25,7 +26,7 @@ export enum SimulationStatus {
   Failed = 1,
   Succeeded = 2,
   InsufficientBalance = 3,
-  NotApproved = 4,
+  NotApproved = 4
 }
 
 /**
@@ -77,14 +78,14 @@ export abstract class Simulator {
         log.error({ e }, 'Error simulating transaction');
         return {
           ...swapRoute,
-          simulationStatus: SimulationStatus.Failed,
+          simulationStatus: SimulationStatus.Failed
         };
       }
     } else {
       log.error('User does not have sufficient balance to simulate.');
       return {
         ...swapRoute,
-        simulationStatus: SimulationStatus.InsufficientBalance,
+        simulationStatus: SimulationStatus.InsufficientBalance
       };
     }
   }
@@ -125,7 +126,7 @@ export abstract class Simulator {
           balance: balance.toString(),
           neededBalance: neededBalance.quotient.toString(),
           neededAddress: neededBalance.wrapped.currency.address,
-          hasBalance,
+          hasBalance
         },
         'Result of balance check for simulation'
       );
@@ -159,7 +160,7 @@ export abstract class Simulator {
         log.info(
           {
             permitAllowance: permit2Allowance.toString(),
-            inputAmount: inputAmount.quotient.toString(),
+            inputAmount: inputAmount.quotient.toString()
           },
           'Permit was provided for simulation on UR, checking that Permit2 has been approved.'
         );
@@ -197,7 +198,7 @@ export abstract class Simulator {
           inputAmount: inputAmount.quotient.toString(),
           permit2Approved,
           universalRouterApproved,
-          expirationValid,
+          expirationValid
         },
         `Simulating on UR, Permit2 approved: ${permit2Approved}, UR approved: ${universalRouterApproved}, Expiraton valid: ${expirationValid}.`
       );
@@ -206,7 +207,7 @@ export abstract class Simulator {
       if (swapOptions.inputTokenPermit) {
         log.info(
           {
-            inputAmount: inputAmount.quotient.toString(),
+            inputAmount: inputAmount.quotient.toString()
           },
           'Simulating on SwapRouter02 info - Permit was provided for simulation. Not checking allowances.'
         );
@@ -224,7 +225,7 @@ export abstract class Simulator {
         {
           hasAllowance,
           allowance: allowance.toString(),
-          inputAmount: inputAmount.quotient.toString(),
+          inputAmount: inputAmount.quotient.toString()
         },
         `Simulating on SwapRouter02 - Has allowance: ${hasAllowance}`
       );

@@ -1,16 +1,30 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Percent, Price, TradeType } from '@uniswap/sdk-core';
-import { Pool } from '@uniswap/v3-sdk';
+import { ChainId, Percent, Price, TradeType } from '@hitesh.sharma_/sdk-core';
+import { Pool } from '@hitesh.sharma_/v3-sdk';
 import _ from 'lodash';
 
-import { SwapOptionsUniversalRouter, SwapType, WRAPPED_NATIVE_CURRENCY, } from '../../../..';
-import { ArbitrumGasData, OptimismGasData, } from '../../../../providers/v3/gas-data-provider';
+import {
+  SwapOptionsUniversalRouter,
+  SwapType,
+  WRAPPED_NATIVE_CURRENCY
+} from '../../../..';
+import {
+  ArbitrumGasData,
+  OptimismGasData
+} from '../../../../providers/v3/gas-data-provider';
 import { CurrencyAmount } from '../../../../util/amounts';
 import { getL2ToL1GasUsed } from '../../../../util/gas-factory-helpers';
 import { log } from '../../../../util/log';
-import { buildSwapMethodParameters, buildTrade, } from '../../../../util/methodParameters';
+import {
+  buildSwapMethodParameters,
+  buildTrade
+} from '../../../../util/methodParameters';
 import { V3RouteWithValidQuote } from '../../entities/route-with-valid-quote';
-import { BuildOnChainGasModelFactoryType, IGasModel, IOnChainGasModelFactory, } from '../gas-model';
+import {
+  BuildOnChainGasModelFactoryType,
+  IGasModel,
+  IOnChainGasModelFactory
+} from '../gas-model';
 
 import {
   BASE_SWAP_COST,
@@ -18,7 +32,7 @@ import {
   COST_PER_INIT_TICK,
   COST_PER_UNINIT_TICK,
   SINGLE_HOP_OVERHEAD,
-  TOKEN_OVERHEAD,
+  TOKEN_OVERHEAD
 } from './gas-costs';
 
 /**
@@ -50,7 +64,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
     pools,
     amountToken,
     quoteToken,
-    l2GasDataProvider,
+    l2GasDataProvider
   }: BuildOnChainGasModelFactoryType): Promise<
     IGasModel<V3RouteWithValidQuote>
   > {
@@ -71,7 +85,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
         type: SwapType.UNIVERSAL_ROUTER,
         recipient: '0x0000000000000000000000000000000000000001',
         deadlineOrPreviousBlockhash: 100,
-        slippageTolerance: new Percent(5, 10_000),
+        slippageTolerance: new Percent(5, 10_000)
       };
       let l1Used = BigNumber.from(0);
       let l1FeeInWei = BigNumber.from(0);
@@ -79,7 +93,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
         ChainId.OPTIMISM,
         ChainId.OPTIMISM_GOERLI,
         ChainId.BASE,
-        ChainId.BASE_GOERLI,
+        ChainId.BASE_GOERLI
       ];
       if (opStackChains.includes(chainId)) {
         [l1Used, l1FeeInWei] = this.calculateOptimismToL1SecurityFee(
@@ -136,7 +150,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
       return {
         gasUsedL1: l1Used,
         gasCostL1USD,
-        gasCostL1QuoteToken,
+        gasCostL1QuoteToken
       };
     };
 
@@ -171,13 +185,13 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
         return {
           gasEstimate: baseGasUse,
           gasCostInToken: totalGasCostNativeCurrency,
-          gasCostInUSD: gasCostInTermsOfUSD,
+          gasCostInUSD: gasCostInTermsOfUSD
         };
       };
 
       return {
         estimateGasCost,
-        calculateL1GasFees,
+        calculateL1GasFees
       };
     }
 
@@ -227,7 +241,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
             {
               nativeTokenPriceBase: nativeTokenPrice.baseCurrency,
               nativeTokenPriceQuote: nativeTokenPrice.quoteCurrency,
-              gasCostInEth: totalGasCostNativeCurrency.currency,
+              gasCostInEth: totalGasCostNativeCurrency.currency
             },
             'Debug eth price token issue'
           );
@@ -287,7 +301,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
                 gasCostInTermsOfAmountToken.toExact(),
               executionPrice: executionPrice.toSignificant(6),
               syntheticGasCostInTermsOfQuoteToken:
-                syntheticGasCostInTermsOfQuoteToken.toSignificant(6),
+                syntheticGasCostInTermsOfQuoteToken.toSignificant(6)
             },
             'New gasCostInTermsOfQuoteToken calculated with synthetic quote token price is less than original'
           );
@@ -314,7 +328,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
           {
             usdT1: usdPool.token0.symbol,
             usdT2: usdPool.token1.symbol,
-            gasCostInNativeToken: totalGasCostNativeCurrency.currency.symbol,
+            gasCostInNativeToken: totalGasCostNativeCurrency.currency.symbol
           },
           'Failed to compute USD gas price'
         );
@@ -329,20 +343,20 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
         return {
           gasEstimate: baseGasUse,
           gasCostInToken: CurrencyAmount.fromRawAmount(quoteToken, 0),
-          gasCostInUSD: CurrencyAmount.fromRawAmount(usdToken, 0),
+          gasCostInUSD: CurrencyAmount.fromRawAmount(usdToken, 0)
         };
       }
 
       return {
         gasEstimate: baseGasUse,
         gasCostInToken: gasCostInTermsOfQuoteToken,
-        gasCostInUSD: gasCostInTermsOfUSD!,
+        gasCostInUSD: gasCostInTermsOfUSD!
       };
     };
 
     return {
       estimateGasCost: estimateGasCost.bind(this),
-      calculateL1GasFees,
+      calculateL1GasFees
     };
   }
 
@@ -393,7 +407,7 @@ export class V3HeuristicGasModelFactory extends IOnChainGasModelFactory {
     return {
       totalGasCostNativeCurrency,
       totalInitializedTicksCrossed,
-      baseGasUse,
+      baseGasUse
     };
   }
 

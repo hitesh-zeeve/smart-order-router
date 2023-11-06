@@ -1,9 +1,14 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { Protocol } from '@uniswap/router-sdk';
-import { ChainId, TradeType } from '@uniswap/sdk-core';
-import { Pool } from '@uniswap/v3-sdk';
+import { Protocol } from '@hitesh.sharma_/router-sdk';
+import { ChainId, TradeType } from '@hitesh.sharma_/sdk-core';
+import { Pool } from '@hitesh.sharma_/v3-sdk';
 import sinon from 'sinon';
-import { DAI_MAINNET, USDC_MAINNET, V3Route, V3RouteWithValidQuote } from '../../../../../../build/main';
+import {
+  DAI_MAINNET,
+  USDC_MAINNET,
+  V3Route,
+  V3RouteWithValidQuote
+} from '../../../../../../build/main';
 import {
   CachedRoutes,
   CurrencyAmount,
@@ -23,14 +28,14 @@ import {
 
 export function getMockedV3GasModel(): IGasModel<V3RouteWithValidQuote> {
   const mockV3GasModel = {
-    estimateGasCost: sinon.stub(),
+    estimateGasCost: sinon.stub()
   };
 
   mockV3GasModel.estimateGasCost.callsFake((r) => {
     return {
       gasEstimate: BigNumber.from(10000),
       gasCostInToken: CurrencyAmount.fromRawAmount(r.quoteToken, 0),
-      gasCostInUSD: CurrencyAmount.fromRawAmount(USDC, 0),
+      gasCostInUSD: CurrencyAmount.fromRawAmount(USDC, 0)
     };
   });
 
@@ -45,14 +50,14 @@ export function getMockedV3PoolProvider(): V3PoolProvider {
     USDC_DAI_MEDIUM,
     USDC_WETH_LOW,
     WETH9_USDT_LOW,
-    DAI_USDT_LOW,
+    DAI_USDT_LOW
   ];
 
   mockV3PoolProvider.getPools.resolves(buildMockV3PoolAccessor(v3MockPools));
   mockV3PoolProvider.getPoolAddress.callsFake((tA, tB, fee) => ({
     poolAddress: Pool.getAddress(tA, tB, fee),
     token0: tA,
-    token1: tB,
+    token1: tB
   }));
 
   return mockV3PoolProvider;
@@ -72,11 +77,13 @@ export function getV3RouteWithValidQuoteStub(): V3RouteWithValidQuote {
     gasModel: getMockedV3GasModel(),
     quoteToken: DAI,
     tradeType: TradeType.EXACT_INPUT,
-    v3PoolProvider: getMockedV3PoolProvider(),
+    v3PoolProvider: getMockedV3PoolProvider()
   });
 }
 
-export function getCachedRoutesStub(blockNumber: number): CachedRoutes | undefined {
+export function getCachedRoutesStub(
+  blockNumber: number
+): CachedRoutes | undefined {
   return CachedRoutes.fromRoutesWithValidQuotes(
     [getV3RouteWithValidQuoteStub()],
     ChainId.MAINNET,

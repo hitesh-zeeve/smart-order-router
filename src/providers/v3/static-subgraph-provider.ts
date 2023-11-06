@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ChainId, Token } from '@uniswap/sdk-core';
-import { FeeAmount, Pool } from '@uniswap/v3-sdk';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
+import { FeeAmount, Pool } from '@hitesh.sharma_/v3-sdk';
 import JSBI from 'jsbi';
 import _ from 'lodash';
 
@@ -153,7 +153,7 @@ const BASES_TO_CHECK_TRADES_AGAINST: ChainTokenList = {
     WBTC_MOONBEAM
   ],
   [ChainId.BASE_GOERLI]: [WRAPPED_NATIVE_CURRENCY[ChainId.BASE_GOERLI]],
-  [ChainId.BASE]: [WRAPPED_NATIVE_CURRENCY[ChainId.BASE], USDC_BASE],
+  [ChainId.BASE]: [WRAPPED_NATIVE_CURRENCY[ChainId.BASE], USDC_BASE]
 };
 
 /**

@@ -1,5 +1,5 @@
-import { ChainId, Token } from '@uniswap/sdk-core';
-import { FeeAmount, Pool } from '@uniswap/v3-sdk';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
+import { FeeAmount, Pool } from '@hitesh.sharma_/v3-sdk';
 import _ from 'lodash';
 
 import { metric, MetricLoggerUnit } from '../../util';
@@ -8,7 +8,6 @@ import { log } from '../../util/log';
 import { ICache } from './../cache';
 import { ProviderConfig } from './../provider';
 import { IV3PoolProvider, V3PoolAccessor } from './pool-provider';
-
 
 /**
  * Provider for getting V3 pools, with functionality for caching the results.
@@ -60,12 +59,20 @@ export class CachingV3PoolProvider implements IV3PoolProvider {
         this.POOL_KEY(this.chainId, poolAddress)
       );
       if (cachedPool) {
-        metric.putMetric('V3_INMEMORY_CACHING_POOL_HIT_IN_MEMORY', 1, MetricLoggerUnit.None)
+        metric.putMetric(
+          'V3_INMEMORY_CACHING_POOL_HIT_IN_MEMORY',
+          1,
+          MetricLoggerUnit.None
+        );
         poolAddressToPool[poolAddress] = cachedPool;
         continue;
       }
 
-      metric.putMetric('V3_INMEMORY_CACHING_POOL_MISS_NOT_IN_MEMORY', 1, MetricLoggerUnit.None)
+      metric.putMetric(
+        'V3_INMEMORY_CACHING_POOL_MISS_NOT_IN_MEMORY',
+        1,
+        MetricLoggerUnit.None
+      );
       poolsToGetTokenPairs.push([token0, token1, feeAmount]);
       poolsToGetAddresses.push(poolAddress);
     }
@@ -79,7 +86,7 @@ export class CachingV3PoolProvider implements IV3PoolProvider {
         poolsToGetTokenPairs: _.map(
           poolsToGetTokenPairs,
           (t) => `${t[0].symbol} ${t[1].symbol} ${t[2]}`
-        ),
+        )
       },
       `Found ${
         Object.keys(poolAddressToPool).length
@@ -113,7 +120,7 @@ export class CachingV3PoolProvider implements IV3PoolProvider {
       },
       getPoolByAddress: (address: string): Pool | undefined =>
         poolAddressToPool[address],
-      getAllPools: (): Pool[] => Object.values(poolAddressToPool),
+      getAllPools: (): Pool[] => Object.values(poolAddressToPool)
     };
   }
 

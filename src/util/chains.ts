@@ -1,4 +1,10 @@
-import { ChainId, Currency, Ether, NativeCurrency, Token } from '@uniswap/sdk-core';
+import {
+  ChainId,
+  Currency,
+  Ether,
+  NativeCurrency,
+  Token
+} from '@hitesh.sharma_/sdk-core';
 
 // WIP: Gnosis, Moonbeam
 export const SUPPORTED_CHAINS: ChainId[] = [
@@ -15,15 +21,11 @@ export const SUPPORTED_CHAINS: ChainId[] = [
   ChainId.CELO,
   ChainId.BNB,
   ChainId.AVALANCHE,
-  ChainId.BASE,
+  ChainId.BASE
   // Gnosis and Moonbeam don't yet have contracts deployed yet
 ];
 
-export const V2_SUPPORTED = [
-  ChainId.MAINNET,
-  ChainId.GOERLI,
-  ChainId.SEPOLIA,
-];
+export const V2_SUPPORTED = [ChainId.MAINNET, ChainId.GOERLI, ChainId.SEPOLIA];
 
 export const HAS_L1_FEE = [
   ChainId.OPTIMISM,
@@ -31,7 +33,7 @@ export const HAS_L1_FEE = [
   ChainId.ARBITRUM_ONE,
   ChainId.ARBITRUM_GOERLI,
   ChainId.BASE,
-  ChainId.BASE_GOERLI,
+  ChainId.BASE_GOERLI
 ];
 
 export const NETWORKS_WITH_SAME_UNISWAP_ADDRESSES = [
@@ -40,7 +42,7 @@ export const NETWORKS_WITH_SAME_UNISWAP_ADDRESSES = [
   ChainId.OPTIMISM,
   ChainId.ARBITRUM_ONE,
   ChainId.POLYGON,
-  ChainId.POLYGON_MUMBAI,
+  ChainId.POLYGON_MUMBAI
 ];
 
 export const ID_TO_CHAIN_ID = (id: number): ChainId => {
@@ -101,9 +103,8 @@ export enum ChainName {
   BNB = 'bnb-mainnet',
   AVALANCHE = 'avalanche-mainnet',
   BASE = 'base-mainnet',
-  BASE_GOERLI = 'base-goerli',
+  BASE_GOERLI = 'base-goerli'
 }
-
 
 export enum NativeCurrencyName {
   // Strings match input for CLI
@@ -113,71 +114,61 @@ export enum NativeCurrencyName {
   GNOSIS = 'XDAI',
   MOONBEAM = 'GLMR',
   BNB = 'BNB',
-  AVALANCHE = 'AVAX',
+  AVALANCHE = 'AVAX'
 }
 
 export const NATIVE_NAMES_BY_ID: { [chainId: number]: string[] } = {
   [ChainId.MAINNET]: [
     'ETH',
     'ETHER',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
   ],
   [ChainId.GOERLI]: [
     'ETH',
     'ETHER',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
   ],
   [ChainId.SEPOLIA]: [
     'ETH',
     'ETHER',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
   ],
   [ChainId.OPTIMISM]: [
     'ETH',
     'ETHER',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
   ],
   [ChainId.OPTIMISM_GOERLI]: [
     'ETH',
     'ETHER',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
   ],
   [ChainId.ARBITRUM_ONE]: [
     'ETH',
     'ETHER',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
   ],
   [ChainId.ARBITRUM_GOERLI]: [
     'ETH',
     'ETHER',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
   ],
-  [ChainId.POLYGON]: [
-    'MATIC', '0x0000000000000000000000000000000000001010'
-  ],
+  [ChainId.POLYGON]: ['MATIC', '0x0000000000000000000000000000000000001010'],
   [ChainId.POLYGON_MUMBAI]: [
     'MATIC',
-    '0x0000000000000000000000000000000000001010',
+    '0x0000000000000000000000000000000000001010'
   ],
   [ChainId.CELO]: ['CELO'],
   [ChainId.CELO_ALFAJORES]: ['CELO'],
   [ChainId.GNOSIS]: ['XDAI'],
   [ChainId.MOONBEAM]: ['GLMR'],
-  [ChainId.BNB]: [
-    'BNB',
-    'BNB',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-  ],
+  [ChainId.BNB]: ['BNB', 'BNB', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'],
   [ChainId.AVALANCHE]: [
     'AVAX',
     'AVALANCHE',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
+    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
   ],
-  [ChainId.BASE]: [
-    'ETH',
-    'ETHER',
-    '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee',
-  ]
+  [ChainId.BASE]: ['ETH', 'ETHER', '0xeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee']
 };
 
 export const NATIVE_CURRENCY: { [chainId: number]: NativeCurrencyName } = {
@@ -196,7 +187,7 @@ export const NATIVE_CURRENCY: { [chainId: number]: NativeCurrencyName } = {
   [ChainId.MOONBEAM]: NativeCurrencyName.MOONBEAM,
   [ChainId.BNB]: NativeCurrencyName.BNB,
   [ChainId.AVALANCHE]: NativeCurrencyName.AVALANCHE,
-  [ChainId.BASE]: NativeCurrencyName.ETHER,
+  [ChainId.BASE]: NativeCurrencyName.ETHER
 };
 
 export const ID_TO_NETWORK_NAME = (id: number): ChainName => {

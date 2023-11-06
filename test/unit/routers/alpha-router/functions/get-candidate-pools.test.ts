@@ -1,5 +1,5 @@
-import { ChainId, Token, TradeType } from '@uniswap/sdk-core';
-import { encodeSqrtRatioX96, FeeAmount, Pool } from '@uniswap/v3-sdk';
+import { ChainId, Token, TradeType } from '@hitesh.sharma_/sdk-core';
+import { encodeSqrtRatioX96, FeeAmount, Pool } from '@hitesh.sharma_/v3-sdk';
 import _ from 'lodash';
 import sinon from 'sinon';
 import {
@@ -12,7 +12,7 @@ import {
   V3PoolProvider,
   V3SubgraphPool,
   V3SubgraphProvider,
-  WRAPPED_NATIVE_CURRENCY,
+  WRAPPED_NATIVE_CURRENCY
 } from '../../../../../src';
 import { getV3CandidatePools } from '../../../../../src/routers/alpha-router/functions/get-candidate-pools';
 import {
@@ -23,7 +23,7 @@ import {
   USDC_DAI_LOW,
   USDC_DAI_MEDIUM,
   USDC_WETH_LOW,
-  WETH9_USDT_LOW,
+  WETH9_USDT_LOW
 } from '../../../../test-util/mock-data';
 
 describe('get candidate pools', () => {
@@ -39,7 +39,7 @@ describe('get candidate pools', () => {
       topNTokenInOut: 0,
       topNSecondHop: 0,
       topNWithEachBaseToken: 0,
-      topNWithBaseToken: 0,
+      topNWithBaseToken: 0
     },
     v2PoolSelection: {
       topN: 0,
@@ -47,13 +47,13 @@ describe('get candidate pools', () => {
       topNTokenInOut: 0,
       topNSecondHop: 0,
       topNWithEachBaseToken: 0,
-      topNWithBaseToken: 0,
+      topNWithBaseToken: 0
     },
     maxSwapsPerPath: 3,
     minSplits: 1,
     maxSplits: 3,
     distributionPercent: 5,
-    forceCrossProtocol: false,
+    forceCrossProtocol: false
   };
 
   const mockTokens = [USDC, DAI, WRAPPED_NATIVE_CURRENCY[1]!, USDT];
@@ -62,7 +62,7 @@ describe('get candidate pools', () => {
     USDC_DAI_MEDIUM,
     USDC_WETH_LOW,
     WETH9_USDT_LOW,
-    DAI_USDT_LOW,
+    DAI_USDT_LOW
   ];
 
   beforeEach(() => {
@@ -85,7 +85,7 @@ describe('get candidate pools', () => {
         return {
           poolAddress: Pool.getAddress(t1, t2, f),
           token0: t1.sortsBefore(t2) ? t1 : t2,
-          token1: t1.sortsBefore(t2) ? t2 : t1,
+          token1: t1.sortsBefore(t2) ? t2 : t1
         };
       }
     );
@@ -101,21 +101,24 @@ describe('get candidate pools', () => {
         ...ROUTING_CONFIG,
         v3PoolSelection: {
           ...ROUTING_CONFIG.v3PoolSelection,
-          topN: 2,
-        },
+          topN: 2
+        }
       },
       poolProvider: mockV3PoolProvider,
       subgraphProvider: mockV3SubgraphProvider,
       tokenProvider: mockTokenProvider,
       blockedTokenListProvider: mockBlockTokenListProvider,
-      chainId: ChainId.MAINNET,
+      chainId: ChainId.MAINNET
     });
 
     expect(
-      mockV3PoolProvider.getPools.calledWithExactly([
-        [USDC, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.LOW],
-        [WRAPPED_NATIVE_CURRENCY[1]!, USDT, FeeAmount.LOW],
-      ], { blockNumber: undefined })
+      mockV3PoolProvider.getPools.calledWithExactly(
+        [
+          [USDC, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.LOW],
+          [WRAPPED_NATIVE_CURRENCY[1]!, USDT, FeeAmount.LOW]
+        ],
+        { blockNumber: undefined }
+      )
     ).toBeTruthy();
   });
 
@@ -128,21 +131,24 @@ describe('get candidate pools', () => {
         ...ROUTING_CONFIG,
         v3PoolSelection: {
           ...ROUTING_CONFIG.v3PoolSelection,
-          topNDirectSwaps: 2,
-        },
+          topNDirectSwaps: 2
+        }
       },
       poolProvider: mockV3PoolProvider,
       subgraphProvider: mockV3SubgraphProvider,
       tokenProvider: mockTokenProvider,
       blockedTokenListProvider: mockBlockTokenListProvider,
-      chainId: ChainId.MAINNET,
+      chainId: ChainId.MAINNET
     });
 
     expect(
-      mockV3PoolProvider.getPools.calledWithExactly([
-        [DAI, USDC, FeeAmount.LOW],
-        [DAI, USDC, FeeAmount.MEDIUM],
-      ], { blockNumber: undefined })
+      mockV3PoolProvider.getPools.calledWithExactly(
+        [
+          [DAI, USDC, FeeAmount.LOW],
+          [DAI, USDC, FeeAmount.MEDIUM]
+        ],
+        { blockNumber: undefined }
+      )
     ).toBeTruthy();
   });
 
@@ -155,21 +161,24 @@ describe('get candidate pools', () => {
         ...ROUTING_CONFIG,
         v3PoolSelection: {
           ...ROUTING_CONFIG.v3PoolSelection,
-          topNTokenInOut: 1,
-        },
+          topNTokenInOut: 1
+        }
       },
       poolProvider: mockV3PoolProvider,
       subgraphProvider: mockV3SubgraphProvider,
       tokenProvider: mockTokenProvider,
       blockedTokenListProvider: mockBlockTokenListProvider,
-      chainId: ChainId.MAINNET,
+      chainId: ChainId.MAINNET
     });
 
     expect(
-      mockV3PoolProvider.getPools.calledWithExactly([
-        [USDC, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.LOW],
-        [DAI, USDC, FeeAmount.LOW],
-      ], { blockNumber: undefined })
+      mockV3PoolProvider.getPools.calledWithExactly(
+        [
+          [USDC, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.LOW],
+          [DAI, USDC, FeeAmount.LOW]
+        ],
+        { blockNumber: undefined }
+      )
     ).toBeTruthy();
   });
 
@@ -180,7 +189,7 @@ describe('get candidate pools', () => {
       USDC_DAI_MEDIUM,
       USDC_WETH_LOW,
       WETH9_USDT_LOW,
-      DAI_USDT_LOW,
+      DAI_USDT_LOW
     ];
 
     const subgraphPools: V3SubgraphPool[] = _.map(
@@ -210,23 +219,26 @@ describe('get candidate pools', () => {
         ...ROUTING_CONFIG,
         v3PoolSelection: {
           ...ROUTING_CONFIG.v3PoolSelection,
-          topNDirectSwaps: 1,
-        },
+          topNDirectSwaps: 1
+        }
       },
       poolProvider: mockV3PoolProvider,
       subgraphProvider: mockV3SubgraphProvider,
       tokenProvider: mockTokenProvider,
       blockedTokenListProvider: mockBlockTokenListProvider,
-      chainId: ChainId.MAINNET,
+      chainId: ChainId.MAINNET
     });
 
     expect(
-      mockV3PoolProvider.getPools.calledWithExactly([
-        [DAI, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.HIGH],
-        [DAI, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.MEDIUM],
-        [DAI, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.LOW],
-        [DAI, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.LOWEST],
-      ], { blockNumber: undefined })
+      mockV3PoolProvider.getPools.calledWithExactly(
+        [
+          [DAI, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.HIGH],
+          [DAI, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.MEDIUM],
+          [DAI, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.LOW],
+          [DAI, WRAPPED_NATIVE_CURRENCY[1]!, FeeAmount.LOWEST]
+        ],
+        { blockNumber: undefined }
+      )
     ).toBeTruthy();
   });
 });

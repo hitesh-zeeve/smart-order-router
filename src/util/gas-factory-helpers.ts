@@ -1,13 +1,22 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { Protocol } from '@uniswap/router-sdk';
-import { ChainId, Currency, CurrencyAmount, Token, TradeType } from '@uniswap/sdk-core';
-import { Pair } from '@uniswap/v2-sdk/dist/entities';
-import { FeeAmount, Pool } from '@uniswap/v3-sdk';
+import { Protocol } from '@hitesh.sharma_/router-sdk';
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Token,
+  TradeType
+} from '@hitesh.sharma_/sdk-core';
+import { Pair } from '@hitesh.sharma_/v2-sdk/dist/entities';
+import { FeeAmount, Pool } from '@hitesh.sharma_/v3-sdk';
 import _ from 'lodash';
 
 import { IV2PoolProvider } from '../providers';
 import { ProviderConfig } from '../providers/provider';
-import { ArbitrumGasData, OptimismGasData, } from '../providers/v3/gas-data-provider';
+import {
+  ArbitrumGasData,
+  OptimismGasData
+} from '../providers/v3/gas-data-provider';
 import { IV3PoolProvider } from '../providers/v3/pool-provider';
 import {
   MethodParameters,
@@ -15,7 +24,7 @@ import {
   SwapRoute,
   usdGasTokensByChain,
   V2RouteWithValidQuote,
-  V3RouteWithValidQuote,
+  V3RouteWithValidQuote
 } from '../routers';
 import { log, WRAPPED_NATIVE_CURRENCY } from '../util';
 
@@ -37,7 +46,7 @@ export async function getV2NativePool(
         weth,
         token,
         reserve0: pool?.reserve0.toExact(),
-        reserve1: pool?.reserve1.toExact(),
+        reserve1: pool?.reserve1.toExact()
       },
       `Could not find a valid WETH V2 pool with ${token.symbol} for computing gas costs.`
     );
@@ -59,7 +68,7 @@ export async function getHighestLiquidityV3NativePool(
     FeeAmount.HIGH,
     FeeAmount.MEDIUM,
     FeeAmount.LOW,
-    FeeAmount.LOWEST,
+    FeeAmount.LOWEST
   ])
     .map<[Token, Token, FeeAmount]>((feeAmount) => {
       return [nativeCurrency, token, feeAmount];
@@ -72,7 +81,7 @@ export async function getHighestLiquidityV3NativePool(
     FeeAmount.HIGH,
     FeeAmount.MEDIUM,
     FeeAmount.LOW,
-    FeeAmount.LOWEST,
+    FeeAmount.LOWEST
   ])
     .map((feeAmount) => {
       return poolAccessor.getPool(nativeCurrency, token, feeAmount);
@@ -112,13 +121,13 @@ export async function getHighestLiquidityV3USDPool(
     FeeAmount.HIGH,
     FeeAmount.MEDIUM,
     FeeAmount.LOW,
-    FeeAmount.LOWEST,
+    FeeAmount.LOWEST
   ])
     .flatMap((feeAmount) => {
       return _.map<Token, [Token, Token, FeeAmount]>(usdTokens, (usdToken) => [
         wrappedCurrency,
         usdToken,
-        feeAmount,
+        feeAmount
       ]);
     })
     .value();
@@ -129,7 +138,7 @@ export async function getHighestLiquidityV3USDPool(
     FeeAmount.HIGH,
     FeeAmount.MEDIUM,
     FeeAmount.LOW,
-    FeeAmount.LOWEST,
+    FeeAmount.LOWEST
   ])
     .flatMap((feeAmount) => {
       const pools = [];
@@ -258,12 +267,7 @@ export async function calculateGasUsed(
   const gasPriceWei = route.gasPriceWei;
   // calculate L2 to L1 security fee if relevant
   let l2toL1FeeInWei = BigNumber.from(0);
-  if (
-    [
-      ChainId.ARBITRUM_ONE,
-      ChainId.ARBITRUM_GOERLI,
-    ].includes(chainId)
-  ) {
+  if ([ChainId.ARBITRUM_ONE, ChainId.ARBITRUM_GOERLI].includes(chainId)) {
     l2toL1FeeInWei = calculateArbitrumToL1FeeFromCalldata(
       route.methodParameters!.calldata,
       l2GasData as ArbitrumGasData
@@ -273,7 +277,7 @@ export async function calculateGasUsed(
       ChainId.OPTIMISM,
       ChainId.OPTIMISM_GOERLI,
       ChainId.BASE,
-      ChainId.BASE_GOERLI,
+      ChainId.BASE_GOERLI
     ].includes(chainId)
   ) {
     l2toL1FeeInWei = calculateOptimismToL1FeeFromCalldata(
@@ -302,8 +306,12 @@ export async function calculateGasUsed(
   // get fee in terms of quote token
   if (!quoteToken.equals(nativeCurrency)) {
     const nativePools = await Promise.all([
-      getHighestLiquidityV3NativePool(quoteToken, v3PoolProvider, providerConfig),
-      getV2NativePool(quoteToken, v2PoolProvider),
+      getHighestLiquidityV3NativePool(
+        quoteToken,
+        v3PoolProvider,
+        providerConfig
+      ),
+      getV2NativePool(quoteToken, v2PoolProvider)
     ]);
     const nativePool = nativePools.find((pool) => pool !== null);
 
@@ -334,7 +342,7 @@ export async function calculateGasUsed(
   return {
     estimatedGasUsedUSD: gasCostUSD,
     estimatedGasUsedQuoteToken: gasCostQuoteToken,
-    quoteGasAdjusted: quoteGasAdjusted,
+    quoteGasAdjusted: quoteGasAdjusted
   };
 }
 
@@ -378,7 +386,7 @@ export function initSwapRouteFromExisting(
             route.quoteToken.name
           ),
           tradeType: tradeType,
-          v3PoolProvider: v3PoolProvider,
+          v3PoolProvider: v3PoolProvider
         });
       case Protocol.V2:
         return new V2RouteWithValidQuote({
@@ -399,7 +407,7 @@ export function initSwapRouteFromExisting(
             route.quoteToken.name
           ),
           tradeType: tradeType,
-          v2PoolProvider: v2PoolProvider,
+          v2PoolProvider: v2PoolProvider
         });
       case Protocol.MIXED:
         return new MixedRouteWithValidQuote({
@@ -426,7 +434,7 @@ export function initSwapRouteFromExisting(
             route.quoteToken.name
           ),
           tradeType: tradeType,
-          v3PoolProvider: v3PoolProvider,
+          v3PoolProvider: v3PoolProvider
         });
     }
   });
@@ -448,11 +456,11 @@ export function initSwapRouteFromExisting(
     blockNumber: BigNumber.from(swapRoute.blockNumber),
     methodParameters: swapRoute.methodParameters
       ? ({
-        calldata: swapRoute.methodParameters.calldata,
-        value: swapRoute.methodParameters.value,
-        to: swapRoute.methodParameters.to,
-      } as MethodParameters)
+          calldata: swapRoute.methodParameters.calldata,
+          value: swapRoute.methodParameters.value,
+          to: swapRoute.methodParameters.to
+        } as MethodParameters)
       : undefined,
-    simulationStatus: swapRoute.simulationStatus,
+    simulationStatus: swapRoute.simulationStatus
   };
 }

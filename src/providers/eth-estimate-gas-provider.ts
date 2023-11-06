@@ -1,12 +1,12 @@
 import { BigNumber } from '@ethersproject/bignumber';
 import { JsonRpcProvider } from '@ethersproject/providers';
-import { ChainId } from '@uniswap/sdk-core';
+import { ChainId } from '@hitesh.sharma_/sdk-core';
 
 import { SwapOptions, SwapRoute, SwapType } from '../routers';
 import { log } from '../util';
 import {
   calculateGasUsed,
-  initSwapRouteFromExisting,
+  initSwapRouteFromExisting
 } from '../util/gas-factory-helpers';
 
 import { ProviderConfig } from './provider';
@@ -57,13 +57,13 @@ export class EthEstimateGasSimulator extends Simulator {
           from: fromAddress,
           value: BigNumber.from(
             currencyIn.isNative ? route.methodParameters!.value : '0'
-          ),
+          )
         });
       } catch (e) {
         log.error({ e }, 'Error estimating gas');
         return {
           ...route,
-          simulationStatus: SimulationStatus.Failed,
+          simulationStatus: SimulationStatus.Failed
         };
       }
     } else if (swapOptions.type == SwapType.SWAP_ROUTER_02) {
@@ -74,13 +74,13 @@ export class EthEstimateGasSimulator extends Simulator {
           from: fromAddress,
           value: BigNumber.from(
             currencyIn.isNative ? route.methodParameters!.value : '0'
-          ),
+          )
         });
       } catch (e) {
         log.error({ e }, 'Error estimating gas');
         return {
           ...route,
-          simulationStatus: SimulationStatus.Failed,
+          simulationStatus: SimulationStatus.Failed
         };
       }
     } else {
@@ -91,7 +91,7 @@ export class EthEstimateGasSimulator extends Simulator {
     log.info(
       {
         methodParameters: route.methodParameters,
-        estimatedGasUsed: estimatedGasUsed.toString(),
+        estimatedGasUsed: estimatedGasUsed.toString()
       },
       'Simulated using eth_estimateGas on SwapRouter02'
     );
@@ -99,7 +99,7 @@ export class EthEstimateGasSimulator extends Simulator {
     const {
       estimatedGasUsedUSD,
       estimatedGasUsedQuoteToken,
-      quoteGasAdjusted,
+      quoteGasAdjusted
     } = await calculateGasUsed(
       route.quote.currency.chainId,
       route,
@@ -120,7 +120,7 @@ export class EthEstimateGasSimulator extends Simulator {
         estimatedGasUsedQuoteToken,
         estimatedGasUsedUSD
       ),
-      simulationStatus: SimulationStatus.Succeeded,
+      simulationStatus: SimulationStatus.Succeeded
     };
   }
 
@@ -164,7 +164,7 @@ export class EthEstimateGasSimulator extends Simulator {
       log.info('Token not approved, skipping simulation');
       return {
         ...swapRoute,
-        simulationStatus: SimulationStatus.NotApproved,
+        simulationStatus: SimulationStatus.NotApproved
       };
     }
   }

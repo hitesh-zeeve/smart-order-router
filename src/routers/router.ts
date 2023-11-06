@@ -3,23 +3,23 @@ import {
   CondensedAddLiquidityOptions,
   MixedRouteSDK,
   Protocol,
-  Trade,
-} from '@uniswap/router-sdk';
+  Trade
+} from '@hitesh.sharma_/router-sdk';
 import {
   Currency,
   Fraction,
   Percent,
   Token,
-  TradeType,
-} from '@uniswap/sdk-core';
+  TradeType
+} from '@hitesh.sharma_/sdk-core';
 import { SwapOptions as UniversalRouterSwapOptions } from '@uniswap/universal-router-sdk';
-import { Route as V2RouteRaw } from '@uniswap/v2-sdk';
+import { Route as V2RouteRaw } from '@hitesh.sharma_/v2-sdk';
 import {
   Pool,
   Position,
   MethodParameters as SDKMethodParameters,
-  Route as V3RouteRaw,
-} from '@uniswap/v3-sdk';
+  Route as V3RouteRaw
+} from '@hitesh.sharma_/v3-sdk';
 
 import { SimulationStatus } from '../providers';
 import { CurrencyAmount } from '../util/amounts';
@@ -101,7 +101,7 @@ export type SwapToRatioRoute = SwapRoute & {
 export enum SwapToRatioStatus {
   SUCCESS = 1,
   NO_ROUTE_FOUND = 2,
-  NO_SWAP_NEEDED = 3,
+  NO_SWAP_NEEDED = 3
 }
 
 export type SwapToRatioSuccess = {
@@ -125,7 +125,7 @@ export type SwapToRatioResponse =
 
 export enum SwapType {
   UNIVERSAL_ROUTER,
-  SWAP_ROUTER_02,
+  SWAP_ROUTER_02
 }
 
 // Swap options for Universal Router and Permit2.

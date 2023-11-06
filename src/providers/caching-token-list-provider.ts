@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
 import { TokenInfo, TokenList } from '@uniswap/token-lists';
 import axios from 'axios';
 import _ from 'lodash';
@@ -168,7 +168,7 @@ export class CachingTokenListProvider
       getTokenBySymbol: (symbol: string) => symbolToToken[symbol.toLowerCase()],
       getAllTokens: (): Token[] => {
         return Object.values(addressToToken);
-      },
+      }
     };
   }
 

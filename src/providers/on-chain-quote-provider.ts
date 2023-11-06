@@ -3,10 +3,10 @@ import { BaseProvider } from '@ethersproject/providers';
 import {
   encodeMixedRouteToPath,
   MixedRouteSDK,
-  Protocol,
-} from '@uniswap/router-sdk';
-import { ChainId } from '@uniswap/sdk-core';
-import { encodeRouteToPath } from '@uniswap/v3-sdk';
+  Protocol
+} from '@hitesh.sharma_/router-sdk';
+import { ChainId } from '@hitesh.sharma_/sdk-core';
+import { encodeRouteToPath } from '@hitesh.sharma_/v3-sdk';
 import retry, { Options as RetryOptions } from 'async-retry';
 import _ from 'lodash';
 import stats from 'stats-lite';
@@ -17,7 +17,7 @@ import { IQuoterV2__factory } from '../types/v3/factories/IQuoterV2__factory';
 import { metric, MetricLoggerUnit } from '../util';
 import {
   MIXED_ROUTE_QUOTER_V1_ADDRESSES,
-  QUOTER_V2_ADDRESSES,
+  QUOTER_V2_ADDRESSES
 } from '../util/addresses';
 import { CurrencyAmount } from '../util/amounts';
 import { log } from '../util/log';
@@ -272,24 +272,24 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
     protected retryOptions: QuoteRetryOptions = {
       retries: DEFAULT_BATCH_RETRIES,
       minTimeout: 25,
-      maxTimeout: 250,
+      maxTimeout: 250
     },
     protected batchParams: BatchParams = {
       multicallChunk: 150,
       gasLimitPerCall: 1_000_000,
-      quoteMinSuccessRate: 0.2,
+      quoteMinSuccessRate: 0.2
     },
     protected gasErrorFailureOverride: FailureOverrides = {
       gasLimitOverride: 1_500_000,
-      multicallChunk: 100,
+      multicallChunk: 100
     },
     protected successRateFailureOverrides: FailureOverrides = {
       gasLimitOverride: 1_300_000,
-      multicallChunk: 110,
+      multicallChunk: 110
     },
     protected blockNumberConfig: BlockNumberConfig = {
       baseBlockOffset: 0,
-      rollback: { enabled: false },
+      rollback: { enabled: false }
     },
     protected quoterAddressOverride?: string
   ) {}
@@ -371,7 +371,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
     const providerConfig: ProviderConfig = {
       ..._providerConfig,
       blockNumber:
-        _providerConfig?.blockNumber ?? originalBlockNumber + baseBlockOffset,
+        _providerConfig?.blockNumber ?? originalBlockNumber + baseBlockOffset
     };
 
     const inputs: [string, string][] = _(routes)
@@ -389,7 +389,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
               );
         const routeInputs: [string, string][] = amounts.map((amount) => [
           encodedRoute,
-          `0x${amount.quotient.toString(16)}`,
+          `0x${amount.quotient.toString(16)}`
         ]);
         return routeInputs;
       })
@@ -402,7 +402,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
     let quoteStates: QuoteBatchState[] = _.map(inputsChunked, (inputChunk) => {
       return {
         status: 'pending',
-        inputs: inputChunk,
+        inputs: inputChunk
       };
     });
 
@@ -435,7 +435,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
     const {
       results: quoteResults,
       blockNumber,
-      approxGasUsedPerSuccessCall,
+      approxGasUsedPerSuccessCall
     } = await retry(
       async (_bail, attemptNumber) => {
         haveIncrementedBlockHeaderFailureCounter = false;
@@ -476,8 +476,8 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
                     functionParams: inputs,
                     providerConfig,
                     additionalConfig: {
-                      gasLimitPerCallOverride: gasLimitOverride,
-                    },
+                      gasLimitPerCallOverride: gasLimitOverride
+                    }
                   });
 
                 const successRateError = this.validateSuccessRate(
@@ -490,14 +490,14 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
                     status: 'failed',
                     inputs,
                     reason: successRateError,
-                    results,
+                    results
                   } as QuoteBatchFailed;
                 }
 
                 return {
                   status: 'success',
                   inputs,
-                  results,
+                  results
                 } as QuoteBatchSuccess;
               } catch (err: any) {
                 // Error from providers have huge messages that include all the calldata and fill the logs.
@@ -508,7 +508,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
                     inputs,
                     reason: new ProviderBlockHeaderError(
                       err.message.slice(0, 500)
-                    ),
+                    )
                   } as QuoteBatchFailed;
                 }
 
@@ -520,7 +520,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
                       `Req ${idx}/${quoteStates.length}. Request had ${
                         inputs.length
                       } inputs. ${err.message.slice(0, 500)}`
-                    ),
+                    )
                   } as QuoteBatchFailed;
                 }
 
@@ -528,7 +528,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
                   return {
                     status: 'failed',
                     inputs,
-                    reason: new ProviderGasError(err.message.slice(0, 500)),
+                    reason: new ProviderGasError(err.message.slice(0, 500))
                   } as QuoteBatchFailed;
                 }
 
@@ -537,7 +537,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
                   inputs,
                   reason: new Error(
                     `Unknown error from provider: ${err.message.slice(0, 500)}`
-                  ),
+                  )
                 } as QuoteBatchFailed;
               }
             }
@@ -696,7 +696,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
           quoteStates = _.map(inputsChunked, (inputChunk) => {
             return {
               status: 'pending',
-              inputs: inputChunk,
+              inputs: inputChunk
             };
           });
         }
@@ -727,7 +727,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
             return {
               results: [],
               blockNumber: BigNumber.from(0),
-              approxGasUsedPerSuccessCall: 0,
+              approxGasUsedPerSuccessCall: 0
             };
           }
           throw new Error(
@@ -746,12 +746,12 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
           approxGasUsedPerSuccessCall: stats.percentile(
             _.map(callResults, (result) => result.approxGasUsedPerSuccessCall),
             100
-          ),
+          )
         };
       },
       {
         retries: DEFAULT_BATCH_RETRIES,
-        ...this.retryOptions,
+        ...this.retryOptions
       }
     );
 
@@ -875,7 +875,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
             debugFailedQuotes.push({
               route: routeStr,
               percent,
-              amount: amountStr,
+              amount: amountStr
             });
 
             return {
@@ -883,7 +883,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
               quote: null,
               sqrtPriceX96AfterList: null,
               gasEstimate: null,
-              initializedTicksCrossedList: null,
+              initializedTicksCrossedList: null
             };
           }
 
@@ -892,7 +892,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
             quote: quoteResult.result[0],
             sqrtPriceX96AfterList: quoteResult.result[1],
             initializedTicksCrossedList: quoteResult.result[2],
-            gasEstimate: quoteResult.result[3],
+            gasEstimate: quoteResult.result[3]
           };
         }
       );
@@ -916,7 +916,7 @@ export class OnChainQuoteProvider implements IOnChainQuoteProvider {
           failedQuotes: _.map(
             failedFlat,
             (amounts, routeStr) => `${routeStr} : ${amounts}`
-          ),
+          )
         },
         `Failed on chain quotes for routes Part ${idx}/${Math.ceil(
           debugFailedQuotes.length / debugChunk

@@ -1,5 +1,5 @@
-import { ChainId, Token } from '@uniswap/sdk-core';
-import { Pair } from '@uniswap/v2-sdk';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
+import { Pair } from '@hitesh.sharma_/v2-sdk';
 import _ from 'lodash';
 
 import { log } from '../../util/log';
@@ -83,7 +83,7 @@ export class CachingV2PoolProvider implements IV2PoolProvider {
         poolsToGetTokenPairs: _.map(
           poolsToGetTokenPairs,
           (t) => t[0].symbol + ' ' + t[1].symbol
-        ),
+        )
       },
       `Found ${
         Object.keys(poolAddressToPool).length
@@ -103,7 +103,7 @@ export class CachingV2PoolProvider implements IV2PoolProvider {
           poolAddressToPool[address] = pool;
           await this.cache.set(this.POOL_KEY(this.chainId, address), {
             pair: pool,
-            block: blockNumber,
+            block: blockNumber
           });
         }
       }
@@ -116,7 +116,7 @@ export class CachingV2PoolProvider implements IV2PoolProvider {
       },
       getPoolByAddress: (address: string): Pair | undefined =>
         poolAddressToPool[address],
-      getAllPools: (): Pair[] => Object.values(poolAddressToPool),
+      getAllPools: (): Pair[] => Object.values(poolAddressToPool)
     };
   }
 

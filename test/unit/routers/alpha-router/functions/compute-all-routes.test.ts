@@ -1,15 +1,15 @@
-import { Pair } from '@uniswap/v2-sdk';
-import { encodeSqrtRatioX96, FeeAmount, Pool } from '@uniswap/v3-sdk';
+import { Pair } from '@hitesh.sharma_/v2-sdk';
+import { encodeSqrtRatioX96, FeeAmount, Pool } from '@hitesh.sharma_/v3-sdk';
 import {
   CurrencyAmount,
   DAI_MAINNET as DAI,
   USDC_MAINNET as USDC,
   USDT_MAINNET as USDT,
-  WBTC_MAINNET as WBTC,
+  WBTC_MAINNET as WBTC
 } from '../../../../../src';
 import {
   computeAllV2Routes,
-  computeAllV3Routes,
+  computeAllV3Routes
 } from '../../../../../src/routers/alpha-router/functions/compute-all-routes';
 import {
   DAI_USDT,
@@ -21,7 +21,7 @@ import {
   USDC_WETH_LOW,
   WBTC_WETH,
   WETH9_USDT_LOW,
-  WETH_USDT,
+  WETH_USDT
 } from '../../../../test-util/mock-data';
 
 describe('compute all v3 routes', () => {
@@ -31,7 +31,7 @@ describe('compute all v3 routes', () => {
       USDC_DAI_MEDIUM,
       USDC_WETH_LOW,
       WETH9_USDT_LOW,
-      DAI_USDT_LOW,
+      DAI_USDT_LOW
     ];
     const routes = computeAllV3Routes(USDC, DAI, pools, 3);
 
@@ -44,7 +44,7 @@ describe('compute all v3 routes', () => {
       USDC_DAI_MEDIUM,
       USDC_WETH_LOW,
       WETH9_USDT_LOW,
-      DAI_USDT_LOW,
+      DAI_USDT_LOW
     ];
     const routes = computeAllV3Routes(USDC, DAI, pools, 1);
 
@@ -58,7 +58,7 @@ describe('compute all v3 routes', () => {
       USDC_WETH_LOW,
       WETH9_USDT_LOW,
       DAI_USDT_LOW,
-      new Pool(USDT, WBTC, FeeAmount.LOW, encodeSqrtRatioX96(1, 1), 500, 0),
+      new Pool(USDT, WBTC, FeeAmount.LOW, encodeSqrtRatioX96(1, 1), 500, 0)
     ];
 
     // No way to get from USDC to WBTC in 2 hops
@@ -92,7 +92,7 @@ describe('compute all v2 routes', () => {
       new Pair(
         CurrencyAmount.fromRawAmount(USDT, 10),
         CurrencyAmount.fromRawAmount(WBTC, 10)
-      ),
+      )
     ];
 
     // No way to get from USDC to WBTC in 2 hops

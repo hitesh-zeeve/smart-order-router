@@ -4,15 +4,23 @@
 
 import { JsonRpcProvider, JsonRpcSigner } from '@ethersproject/providers';
 import { AllowanceTransfer, PermitSingle } from '@uniswap/permit2-sdk';
-import { Protocol } from '@uniswap/router-sdk';
-import { ChainId, Currency, CurrencyAmount, Ether, Percent, Token, TradeType, } from '@uniswap/sdk-core';
+import { Protocol } from '@hitesh.sharma_/router-sdk';
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Ether,
+  Percent,
+  Token,
+  TradeType
+} from '@hitesh.sharma_/sdk-core';
 import {
   PERMIT2_ADDRESS,
-  UNIVERSAL_ROUTER_ADDRESS as UNIVERSAL_ROUTER_ADDRESS_BY_CHAIN,
+  UNIVERSAL_ROUTER_ADDRESS as UNIVERSAL_ROUTER_ADDRESS_BY_CHAIN
 } from '@uniswap/universal-router-sdk';
 import { Permit2Permit } from '@uniswap/universal-router-sdk/dist/utils/inputTokens';
-import { Pair } from '@uniswap/v2-sdk';
-import { encodeSqrtRatioX96, FeeAmount, Pool } from '@uniswap/v3-sdk';
+import { Pair } from '@hitesh.sharma_/v2-sdk';
+import { encodeSqrtRatioX96, FeeAmount, Pool } from '@hitesh.sharma_/v3-sdk';
 import bunyan from 'bunyan';
 import { BigNumber, providers, Wallet } from 'ethers';
 import { parseEther } from 'ethers/lib/utils';
@@ -66,7 +74,7 @@ import {
   WBTC_GNOSIS,
   WBTC_MOONBEAM,
   WETH9,
-  WNATIVE_ON,
+  WNATIVE_ON
 } from '../../../../src';
 import { DEFAULT_ROUTING_CONFIG_BY_CHAIN } from '../../../../src/routers/alpha-router/config';
 import { Permit2__factory } from '../../../../src/types/other/factories/Permit2__factory';
@@ -144,7 +152,7 @@ if (process.env.INTEG_TEST_DEBUG) {
     bunyan.createLogger({
       name: 'Uniswap Smart Order Router',
       serializers: bunyan.stdSerializers,
-      level: bunyan.DEBUG,
+      level: bunyan.DEBUG
     })
   );
 }
@@ -173,7 +181,7 @@ describe('alpha router integration', () => {
   const ROUTING_CONFIG: AlphaRouterConfig = {
     // @ts-ignore[TS7053] - complaining about switch being non exhaustive
     ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[ChainId.MAINNET],
-    protocols: [Protocol.V3, Protocol.V2],
+    protocols: [Protocol.V3, Protocol.V2]
   };
 
   const executeSwap = async (
@@ -225,13 +233,13 @@ describe('alpha router integration', () => {
         value: BigNumber.from(methodParameters.value),
         from: alice._address,
         gasPrice: BigNumber.from(2000000000000),
-        type: 1,
+        type: 1
       };
 
       if (gasLimit) {
         transactionResponse = await alice.sendTransaction({
           ...transaction,
-          gasLimit: gasLimit,
+          gasLimit: gasLimit
         });
       } else {
         transactionResponse = await alice.sendTransaction(transaction);
@@ -250,13 +258,13 @@ describe('alpha router integration', () => {
         value: BigNumber.from(methodParameters.value),
         from: alice._address,
         gasPrice: BigNumber.from(2000000000000),
-        type: 1,
+        type: 1
       };
 
       if (gasLimit) {
         transactionResponse = await alice.sendTransaction({
           ...transaction,
-          gasLimit: gasLimit,
+          gasLimit: gasLimit
         });
       } else {
         transactionResponse = await alice.sendTransaction(transaction);
@@ -274,7 +282,7 @@ describe('alpha router integration', () => {
       tokenInAfter,
       tokenInBefore,
       tokenOutAfter,
-      tokenOutBefore,
+      tokenOutBefore
     };
   };
 
@@ -439,7 +447,7 @@ describe('alpha router integration', () => {
       alice._address,
       [parseAmount('4000', WETH9[1])],
       [
-        '0x06920c9fc643de77b99cb7670a944ad31eaaa260', // WETH whale
+        '0x06920c9fc643de77b99cb7670a944ad31eaaa260' // WETH whale
       ]
     );
 
@@ -516,7 +524,7 @@ describe('alpha router integration', () => {
       multicall2Provider,
       v2PoolProvider,
       v3PoolProvider,
-      simulator,
+      simulator
     });
 
     // this will be used to test gas limit simulation for web flow
@@ -527,7 +535,7 @@ describe('alpha router integration', () => {
       multicall2Provider,
       v2PoolProvider,
       v3PoolProvider,
-      simulator: ethEstimateGasSimulator,
+      simulator: ethEstimateGasSimulator
     });
   });
 
@@ -554,10 +562,10 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
-              ...ROUTING_CONFIG,
+              ...ROUTING_CONFIG
             }
           );
 
@@ -601,14 +609,13 @@ describe('alpha router integration', () => {
             getQuoteToken(tokenIn, tokenOut, tradeType),
             tradeType,
             {
-
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
-              ...ROUTING_CONFIG,
+              ...ROUTING_CONFIG
             }
           );
 
@@ -633,10 +640,10 @@ describe('alpha router integration', () => {
               type: SwapType.SWAP_ROUTER_02,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadline: parseDeadline(360),
+              deadline: parseDeadline(360)
             },
             {
-              ...ROUTING_CONFIG,
+              ...ROUTING_CONFIG
             }
           );
 
@@ -677,12 +684,12 @@ describe('alpha router integration', () => {
               expiration: Math.floor(
                 new Date().getTime() / 1000 + 100000
               ).toString(),
-              nonce,
+              nonce
             },
             spender: UNIVERSAL_ROUTER_ADDRESS,
             sigDeadline: Math.floor(
               new Date().getTime() / 1000 + 100000
-            ).toString(),
+            ).toString()
           };
 
           const { domain, types, values } = AllowanceTransfer.getPermitData(
@@ -695,7 +702,7 @@ describe('alpha router integration', () => {
 
           const permit2permit: Permit2Permit = {
             ...permit,
-            signature,
+            signature
           };
 
           const swap = await alphaRouter.route(
@@ -707,10 +714,10 @@ describe('alpha router integration', () => {
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
               deadlineOrPreviousBlockhash: parseDeadline(360),
-              inputTokenPermit: permit2permit,
+              inputTokenPermit: permit2permit
             },
             {
-              ...ROUTING_CONFIG,
+              ...ROUTING_CONFIG
             }
           );
 
@@ -753,12 +760,12 @@ describe('alpha router integration', () => {
               expiration: Math.floor(
                 new Date().getTime() / 1000 + 1000
               ).toString(),
-              nonce,
+              nonce
             },
             spender: UNIVERSAL_ROUTER_ADDRESS,
             sigDeadline: Math.floor(
               new Date().getTime() / 1000 + 1000
-            ).toString(),
+            ).toString()
           };
 
           const { domain, types, values } = AllowanceTransfer.getPermitData(
@@ -771,7 +778,7 @@ describe('alpha router integration', () => {
 
           const permit2permit: Permit2Permit = {
             ...permit,
-            signature,
+            signature
           };
 
           const swap = await alphaRouter.route(
@@ -783,11 +790,11 @@ describe('alpha router integration', () => {
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
               deadlineOrPreviousBlockhash: parseDeadline(360),
-              inputTokenPermit: permit2permit,
+              inputTokenPermit: permit2permit
             },
             {
               ...ROUTING_CONFIG,
-              minSplits: 3,
+              minSplits: 3
             }
           );
 
@@ -834,10 +841,10 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
-              ...ROUTING_CONFIG,
+              ...ROUTING_CONFIG
             }
           );
           expect(swap).toBeDefined();
@@ -874,11 +881,11 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
               ...ROUTING_CONFIG,
-              minSplits: 2,
+              minSplits: 2
             }
           );
           expect(swap).toBeDefined();
@@ -963,12 +970,12 @@ describe('alpha router integration', () => {
               expiration: Math.floor(
                 new Date().getTime() / 1000 + 1000
               ).toString(),
-              nonce,
+              nonce
             },
             spender: UNIVERSAL_ROUTER_ADDRESS,
             sigDeadline: Math.floor(
               new Date().getTime() / 1000 + 1000
-            ).toString(),
+            ).toString()
           };
 
           const { domain, types, values } = AllowanceTransfer.getPermitData(
@@ -981,7 +988,7 @@ describe('alpha router integration', () => {
 
           const permit2permit: Permit2Permit = {
             ...permit,
-            signature,
+            signature
           };
 
           const swap = await alphaRouter.route(
@@ -993,11 +1000,11 @@ describe('alpha router integration', () => {
               recipient: alice._address,
               slippageTolerance: SLIPPAGE.multiply(10),
               deadlineOrPreviousBlockhash: parseDeadline(360),
-              inputTokenPermit: permit2permit,
+              inputTokenPermit: permit2permit
             },
             {
               ...ROUTING_CONFIG,
-              minSplits: 2,
+              minSplits: 2
             }
           );
           expect(swap).toBeDefined();
@@ -1040,11 +1047,11 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
               ...ROUTING_CONFIG,
-              protocols: [Protocol.V2],
+              protocols: [Protocol.V2]
             }
           );
           expect(swap).toBeDefined();
@@ -1110,11 +1117,11 @@ describe('alpha router integration', () => {
               type: SwapType.SWAP_ROUTER_02,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadline: parseDeadline(360),
+              deadline: parseDeadline(360)
             },
             {
               ...ROUTING_CONFIG,
-              protocols: [Protocol.V2],
+              protocols: [Protocol.V2]
             }
           );
           expect(swap).toBeDefined();
@@ -1179,10 +1186,10 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
-              ...ROUTING_CONFIG,
+              ...ROUTING_CONFIG
             }
           );
           expect(swap).toBeDefined();
@@ -1218,10 +1225,10 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
-              ...ROUTING_CONFIG,
+              ...ROUTING_CONFIG
             }
           );
           expect(swap).toBeDefined();
@@ -1257,11 +1264,11 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
               ...ROUTING_CONFIG,
-              protocols: [Protocol.V3],
+              protocols: [Protocol.V3]
             }
           );
           expect(swap).toBeDefined();
@@ -1305,11 +1312,11 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
               ...ROUTING_CONFIG,
-              protocols: [Protocol.V2],
+              protocols: [Protocol.V2]
             }
           );
           expect(swap).toBeDefined();
@@ -1353,11 +1360,11 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: SLIPPAGE,
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
               ...ROUTING_CONFIG,
-              forceCrossProtocol: true,
+              forceCrossProtocol: true
             }
           );
           expect(swap).toBeDefined();
@@ -1415,10 +1422,10 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
-                ...ROUTING_CONFIG,
+                ...ROUTING_CONFIG
               }
             );
 
@@ -1470,10 +1477,10 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadline: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
-                ...ROUTING_CONFIG,
+                ...ROUTING_CONFIG
               }
             );
 
@@ -1484,7 +1491,7 @@ describe('alpha router integration', () => {
               quote,
               quoteGasAdjusted,
               methodParameters,
-              simulationStatus,
+              simulationStatus
             } = swap!;
 
             await validateSwapRoute(
@@ -1532,12 +1539,12 @@ describe('alpha router integration', () => {
                   expiration: Math.floor(
                     new Date().getTime() / 1000 + 100000
                   ).toString(),
-                  nonce,
+                  nonce
                 },
                 spender: UNIVERSAL_ROUTER_ADDRESS,
                 sigDeadline: Math.floor(
                   new Date().getTime() / 1000 + 100000
-                ).toString(),
+                ).toString()
               };
 
               const { domain, types, values } = AllowanceTransfer.getPermitData(
@@ -1556,7 +1563,7 @@ describe('alpha router integration', () => {
 
               const permit2permit: Permit2Permit = {
                 ...permit,
-                signature,
+                signature
               };
 
               const swap = await alphaRouter.route(
@@ -1569,10 +1576,10 @@ describe('alpha router integration', () => {
                   slippageTolerance: SLIPPAGE,
                   deadlineOrPreviousBlockhash: parseDeadline(360),
                   simulate: { fromAddress: wallet.address },
-                  inputTokenPermit: permit2permit,
+                  inputTokenPermit: permit2permit
                 },
                 {
-                  ...ROUTING_CONFIG,
+                  ...ROUTING_CONFIG
                 }
               );
 
@@ -1602,11 +1609,11 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
                 ...ROUTING_CONFIG,
-                minSplits: 2,
+                minSplits: 2
               }
             );
             expect(swap).toBeDefined();
@@ -1618,7 +1625,7 @@ describe('alpha router integration', () => {
               methodParameters,
               estimatedGasUsed,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
 
             expect(
@@ -1661,11 +1668,11 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
                 ...ROUTING_CONFIG,
-                protocols: [Protocol.V2],
+                protocols: [Protocol.V2]
               }
             );
             expect(swap).toBeDefined();
@@ -1675,7 +1682,7 @@ describe('alpha router integration', () => {
               quote,
               quoteGasAdjusted,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
             expect(
               quoteGasAdjusted
@@ -1705,11 +1712,11 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadline: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
                 ...ROUTING_CONFIG,
-                protocols: [Protocol.V2],
+                protocols: [Protocol.V2]
               }
             );
             expect(swap).toBeDefined();
@@ -1719,7 +1726,7 @@ describe('alpha router integration', () => {
               quote,
               quoteGasAdjusted,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
             expect(
               quoteGasAdjusted
@@ -1747,10 +1754,10 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: new Percent(50, 100),
                 deadlineOrPreviousBlockhash: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
-                ...ROUTING_CONFIG,
+                ...ROUTING_CONFIG
               }
             );
             expect(swap).toBeDefined();
@@ -1762,7 +1769,7 @@ describe('alpha router integration', () => {
               methodParameters,
               estimatedGasUsed,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
 
             expect(
@@ -1804,10 +1811,10 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
-                ...ROUTING_CONFIG,
+                ...ROUTING_CONFIG
               }
             );
             expect(swap).toBeDefined();
@@ -1819,7 +1826,7 @@ describe('alpha router integration', () => {
               methodParameters,
               estimatedGasUsed,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
 
             expect(
@@ -1861,11 +1868,11 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
                 ...ROUTING_CONFIG,
-                protocols: [Protocol.V3],
+                protocols: [Protocol.V3]
               }
             );
             expect(swap).toBeDefined();
@@ -1877,7 +1884,7 @@ describe('alpha router integration', () => {
               methodParameters,
               estimatedGasUsed,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
             expect(
               quoteGasAdjusted
@@ -1918,11 +1925,11 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
                 ...ROUTING_CONFIG,
-                protocols: [Protocol.V2],
+                protocols: [Protocol.V2]
               }
             );
             expect(swap).toBeDefined();
@@ -1934,7 +1941,7 @@ describe('alpha router integration', () => {
               methodParameters,
               estimatedGasUsed,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
 
             expect(
@@ -1976,11 +1983,11 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
                 ...ROUTING_CONFIG,
-                forceCrossProtocol: true,
+                forceCrossProtocol: true
               }
             );
             expect(swap).toBeDefined();
@@ -1992,7 +1999,7 @@ describe('alpha router integration', () => {
               methodParameters,
               estimatedGasUsed,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
 
             expect(
@@ -2036,11 +2043,11 @@ describe('alpha router integration', () => {
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
                 simulate: {
-                  fromAddress: '0xeaf1c41339f7D33A2c47f82F7b9309B5cBC83B5F',
-                },
+                  fromAddress: '0xeaf1c41339f7D33A2c47f82F7b9309B5cBC83B5F'
+                }
               },
               {
-                ...ROUTING_CONFIG,
+                ...ROUTING_CONFIG
               }
             );
 
@@ -2051,7 +2058,7 @@ describe('alpha router integration', () => {
               quote,
               quoteGasAdjusted,
               methodParameters,
-              simulationStatus,
+              simulationStatus
             } = swap!;
 
             expect(simulationStatus).toBeDefined();
@@ -2098,12 +2105,12 @@ describe('alpha router integration', () => {
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
                 simulate: {
-                  fromAddress: '0xeaf1c41339f7D33A2c47f82F7b9309B5cBC83B5F',
-                },
+                  fromAddress: '0xeaf1c41339f7D33A2c47f82F7b9309B5cBC83B5F'
+                }
               },
               {
                 ...ROUTING_CONFIG,
-                protocols: [Protocol.V2],
+                protocols: [Protocol.V2]
               }
             );
             expect(swap).toBeDefined();
@@ -2113,7 +2120,7 @@ describe('alpha router integration', () => {
               quote,
               quoteGasAdjusted,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
             expect(
               quoteGasAdjusted
@@ -2146,10 +2153,10 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadline: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
-                ...ROUTING_CONFIG,
+                ...ROUTING_CONFIG
               }
             );
 
@@ -2160,7 +2167,7 @@ describe('alpha router integration', () => {
               quote,
               quoteGasAdjusted,
               methodParameters,
-              simulationStatus,
+              simulationStatus
             } = swap!;
 
             await validateSwapRoute(
@@ -2205,11 +2212,11 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadline: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               },
               {
                 ...ROUTING_CONFIG,
-                protocols: [Protocol.V2],
+                protocols: [Protocol.V2]
               }
             );
             expect(swap).toBeDefined();
@@ -2219,7 +2226,7 @@ describe('alpha router integration', () => {
               quote,
               quoteGasAdjusted,
               simulationStatus,
-              estimatedGasUsedQuoteToken,
+              estimatedGasUsedQuoteToken
             } = swap!;
             expect(
               quoteGasAdjusted
@@ -2248,7 +2255,7 @@ describe('alpha router integration', () => {
                 recipient: alice._address,
                 slippageTolerance: SLIPPAGE,
                 deadlineOrPreviousBlockhash: parseDeadline(360),
-                simulate: { fromAddress: WHALES(tokenIn) },
+                simulate: { fromAddress: WHALES(tokenIn) }
               }
             );
             expect(swap).toBeDefined();
@@ -2277,7 +2284,7 @@ describe('alpha router integration', () => {
           tradeType,
           undefined,
           {
-            ...ROUTING_CONFIG,
+            ...ROUTING_CONFIG
           }
         );
         expect(swap).toBeDefined();
@@ -2303,7 +2310,7 @@ describe('alpha router integration', () => {
           chainId: 1,
           provider: hardhat.providers[0]!,
           multicall2Provider,
-          gasPriceProvider,
+          gasPriceProvider
         });
 
         const swap = await customAlphaRouter.route(
@@ -2312,7 +2319,7 @@ describe('alpha router integration', () => {
           tradeType,
           undefined,
           {
-            ...ROUTING_CONFIG,
+            ...ROUTING_CONFIG
           }
         );
         expect(swap).toBeDefined();
@@ -2351,7 +2358,7 @@ describe('alpha router integration', () => {
         alice._address,
         [parseAmount('10000', BOND_MAINNET)],
         [
-          '0xf510dde022a655e7e3189cdf67687e7ffcd80d91', // BOND token whale
+          '0xf510dde022a655e7e3189cdf67687e7ffcd80d91' // BOND token whale
         ]
       );
       const aliceBONDBalance = await hardhat.getBalance(
@@ -2380,12 +2387,12 @@ describe('alpha router integration', () => {
               type: SwapType.UNIVERSAL_ROUTER,
               recipient: alice._address,
               slippageTolerance: new Percent(50, 100),
-              deadlineOrPreviousBlockhash: parseDeadline(360),
+              deadlineOrPreviousBlockhash: parseDeadline(360)
             },
             {
               ...ROUTING_CONFIG,
               protocols: [Protocol.V2, Protocol.V3, Protocol.MIXED],
-              forceMixedRoutes: true,
+              forceMixedRoutes: true
             }
           );
 
@@ -2475,11 +2482,11 @@ describe('external class tests', () => {
   it('Prevents incorrect routes array configurations', async () => {
     const amountIns = [
       CurrencyAmount.fromRawAmount(token0, 1),
-      CurrencyAmount.fromRawAmount(token0, 2),
+      CurrencyAmount.fromRawAmount(token0, 2)
     ];
     const amountOuts = [
       CurrencyAmount.fromRawAmount(token1, 1),
-      CurrencyAmount.fromRawAmount(token1, 2),
+      CurrencyAmount.fromRawAmount(token1, 2)
     ];
     const v3Route = new V3Route([pool_0_1], token0, token1);
     const v3Route_2 = new V3Route([pool_0_1, pool_1_2], token0, token2);
@@ -2520,13 +2527,13 @@ describe('external class tests', () => {
 
     await expect(
       onChainQuoteProvider.getQuotesManyExactOut(amountOuts, [
-        mixedRoute,
+        mixedRoute
       ] as unknown as V3Route[])
     ).rejects.toThrow();
 
     await expect(
       onChainQuoteProvider.getQuotesManyExactOut(amountOuts, [
-        v2route,
+        v2route
       ] as unknown as V3Route[])
     ).rejects.toThrow();
 
@@ -2560,7 +2567,7 @@ describe('quote for other networks', () => {
     [ChainId.BNB]: () => USDC_BNB,
     [ChainId.AVALANCHE]: () => USDC_ON(ChainId.AVALANCHE),
     [ChainId.BASE]: () => USDC_ON(ChainId.BASE),
-    [ChainId.BASE_GOERLI]: () => USDC_ON(ChainId.BASE_GOERLI),
+    [ChainId.BASE_GOERLI]: () => USDC_ON(ChainId.BASE_GOERLI)
   };
   const TEST_ERC20_2: { [chainId in ChainId]: () => Token } = {
     [ChainId.MAINNET]: () => DAI_ON(1),
@@ -2579,7 +2586,7 @@ describe('quote for other networks', () => {
     [ChainId.BNB]: () => USDT_BNB,
     [ChainId.AVALANCHE]: () => DAI_ON(ChainId.AVALANCHE),
     [ChainId.BASE]: () => USDC_ON(ChainId.BASE),
-    [ChainId.BASE_GOERLI]: () => USDC_ON(ChainId.BASE_GOERLI),
+    [ChainId.BASE_GOERLI]: () => USDC_ON(ChainId.BASE_GOERLI)
   };
 
   // TODO: Find valid pools/tokens on optimistic kovan and polygon mumbai. We skip those tests for now.
@@ -2602,7 +2609,7 @@ describe('quote for other networks', () => {
       const erc1 = TEST_ERC20_1[chain]();
       const erc2 = TEST_ERC20_2[chain]();
 
-      describe(`${ID_TO_NETWORK_NAME(chain)} ${tradeType} 2xx`, function() {
+      describe(`${ID_TO_NETWORK_NAME(chain)} ${tradeType} 2xx`, function () {
         const wrappedNative = WNATIVE_ON(chain);
 
         let alphaRouter: AlphaRouter;
@@ -2652,11 +2659,11 @@ describe('quote for other networks', () => {
             chainId: chain,
             provider,
             multicall2Provider,
-            simulator,
+            simulator
           });
         });
 
-        describe(`Swap`, function() {
+        describe(`Swap`, function () {
           it(`${wrappedNative.symbol} -> erc20`, async () => {
             const tokenIn = wrappedNative;
             const tokenOut = erc1;
@@ -2673,7 +2680,7 @@ describe('quote for other networks', () => {
               {
                 // @ts-ignore[TS7053] - complaining about switch being non exhaustive
                 ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[chain],
-                protocols: [Protocol.V3, Protocol.V2],
+                protocols: [Protocol.V3, Protocol.V2]
               }
             );
             expect(swap).toBeDefined();
@@ -2698,7 +2705,7 @@ describe('quote for other networks', () => {
               {
                 // @ts-ignore[TS7053] - complaining about switch being non exhaustive
                 ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[chain],
-                protocols: [Protocol.V3, Protocol.V2],
+                protocols: [Protocol.V3, Protocol.V2]
               }
             );
             expect(swap).toBeDefined();
@@ -2720,8 +2727,8 @@ describe('quote for other networks', () => {
                   ? parseAmount('10', tokenIn)
                   : parseAmount('10', tokenOut)
                 : tradeType == TradeType.EXACT_INPUT
-                  ? parseAmount('1', tokenIn)
-                  : parseAmount('1', tokenOut);
+                ? parseAmount('1', tokenIn)
+                : parseAmount('1', tokenOut);
 
             const swap = await alphaRouter.route(
               amount,
@@ -2731,7 +2738,7 @@ describe('quote for other networks', () => {
               {
                 // @ts-ignore[TS7053] - complaining about switch being non exhaustive
                 ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[chain],
-                protocols: [Protocol.V3, Protocol.V2],
+                protocols: [Protocol.V3, Protocol.V2]
               }
             );
             expect(swap).toBeDefined();
@@ -2754,7 +2761,7 @@ describe('quote for other networks', () => {
               {
                 // @ts-ignore[TS7053] - complaining about switch being non exhaustive
                 ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[chain],
-                protocols: [Protocol.V3, Protocol.V2],
+                protocols: [Protocol.V3, Protocol.V2]
               }
             );
             expect(swap).toBeDefined();
@@ -2787,7 +2794,7 @@ describe('quote for other networks', () => {
               {
                 // @ts-ignore[TS7053] - complaining about switch being non exhaustive
                 ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[chain],
-                protocols: [],
+                protocols: []
               }
             );
             expect(swap).toBeDefined();
@@ -2811,7 +2818,7 @@ describe('quote for other networks', () => {
                 {
                   // @ts-ignore[TS7053] - complaining about switch being non exhaustive
                   ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[chain],
-                  protocols: [Protocol.MIXED],
+                  protocols: [Protocol.MIXED]
                 }
               );
               expect(swap).toBeNull();
@@ -2820,7 +2827,7 @@ describe('quote for other networks', () => {
         });
 
         if (isTenderlyEnvironmentSet()) {
-          describe(`Simulate + Swap`, function() {
+          describe(`Simulate + Swap`, function () {
             // Tenderly does not support Celo
             if ([ChainId.CELO, ChainId.CELO_ALFAJORES].includes(chain)) {
               return;
@@ -2837,19 +2844,19 @@ describe('quote for other networks', () => {
               const swapOptions: SwapOptions =
                 chain == ChainId.GOERLI
                   ? {
-                    type: SwapType.SWAP_ROUTER_02,
-                    recipient: WHALES(tokenIn),
-                    slippageTolerance: SLIPPAGE,
-                    deadline: parseDeadline(360),
-                    simulate: { fromAddress: WHALES(tokenIn) },
-                  }
+                      type: SwapType.SWAP_ROUTER_02,
+                      recipient: WHALES(tokenIn),
+                      slippageTolerance: SLIPPAGE,
+                      deadline: parseDeadline(360),
+                      simulate: { fromAddress: WHALES(tokenIn) }
+                    }
                   : {
-                    type: SwapType.UNIVERSAL_ROUTER,
-                    recipient: WHALES(tokenIn),
-                    slippageTolerance: SLIPPAGE,
-                    deadlineOrPreviousBlockhash: parseDeadline(360),
-                    simulate: { fromAddress: WHALES(tokenIn) },
-                  };
+                      type: SwapType.UNIVERSAL_ROUTER,
+                      recipient: WHALES(tokenIn),
+                      slippageTolerance: SLIPPAGE,
+                      deadlineOrPreviousBlockhash: parseDeadline(360),
+                      simulate: { fromAddress: WHALES(tokenIn) }
+                    };
 
               const swap = await alphaRouter.route(
                 amount,
@@ -2859,7 +2866,7 @@ describe('quote for other networks', () => {
                 {
                   // @ts-ignore[TS7053] - complaining about switch being non exhaustive
                   ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[chain],
-                  protocols: [Protocol.V3, Protocol.V2],
+                  protocols: [Protocol.V3, Protocol.V2]
                 }
               );
               expect(swap).toBeDefined();
@@ -2892,19 +2899,19 @@ describe('quote for other networks', () => {
               const swapOptions: SwapOptions =
                 chain == ChainId.GOERLI
                   ? {
-                    type: SwapType.SWAP_ROUTER_02,
-                    recipient: WHALES(tokenIn),
-                    slippageTolerance: SLIPPAGE,
-                    deadline: parseDeadline(360),
-                    simulate: { fromAddress: WHALES(tokenIn) },
-                  }
+                      type: SwapType.SWAP_ROUTER_02,
+                      recipient: WHALES(tokenIn),
+                      slippageTolerance: SLIPPAGE,
+                      deadline: parseDeadline(360),
+                      simulate: { fromAddress: WHALES(tokenIn) }
+                    }
                   : {
-                    type: SwapType.UNIVERSAL_ROUTER,
-                    recipient: WHALES(tokenIn),
-                    slippageTolerance: SLIPPAGE,
-                    deadlineOrPreviousBlockhash: parseDeadline(360),
-                    simulate: { fromAddress: WHALES(tokenIn) },
-                  };
+                      type: SwapType.UNIVERSAL_ROUTER,
+                      recipient: WHALES(tokenIn),
+                      slippageTolerance: SLIPPAGE,
+                      deadlineOrPreviousBlockhash: parseDeadline(360),
+                      simulate: { fromAddress: WHALES(tokenIn) }
+                    };
 
               const swap = await alphaRouter.route(
                 amount,
@@ -2914,7 +2921,7 @@ describe('quote for other networks', () => {
                 {
                   // @ts-ignore[TS7053] - complaining about switch being non exhaustive
                   ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[chain],
-                  protocols: [Protocol.V3, Protocol.V2],
+                  protocols: [Protocol.V3, Protocol.V2]
                 }
               );
               expect(swap).toBeDefined();
@@ -2947,19 +2954,19 @@ describe('quote for other networks', () => {
               const swapOptions: SwapOptions =
                 chain == ChainId.GOERLI
                   ? {
-                    type: SwapType.SWAP_ROUTER_02,
-                    recipient: WHALES(tokenIn),
-                    slippageTolerance: SLIPPAGE,
-                    deadline: parseDeadline(360),
-                    simulate: { fromAddress: WHALES(tokenIn) },
-                  }
+                      type: SwapType.SWAP_ROUTER_02,
+                      recipient: WHALES(tokenIn),
+                      slippageTolerance: SLIPPAGE,
+                      deadline: parseDeadline(360),
+                      simulate: { fromAddress: WHALES(tokenIn) }
+                    }
                   : {
-                    type: SwapType.UNIVERSAL_ROUTER,
-                    recipient: WHALES(tokenIn),
-                    slippageTolerance: SLIPPAGE,
-                    deadlineOrPreviousBlockhash: parseDeadline(360),
-                    simulate: { fromAddress: WHALES(tokenIn) },
-                  };
+                      type: SwapType.UNIVERSAL_ROUTER,
+                      recipient: WHALES(tokenIn),
+                      slippageTolerance: SLIPPAGE,
+                      deadlineOrPreviousBlockhash: parseDeadline(360),
+                      simulate: { fromAddress: WHALES(tokenIn) }
+                    };
 
               const swap = await alphaRouter.route(
                 amount,
@@ -2969,7 +2976,7 @@ describe('quote for other networks', () => {
                 {
                   // @ts-ignore[TS7053] - complaining about switch being non exhaustive
                   ...DEFAULT_ROUTING_CONFIG_BY_CHAIN[chain],
-                  protocols: [Protocol.V3, Protocol.V2],
+                  protocols: [Protocol.V3, Protocol.V2]
                 }
               );
               expect(swap).toBeDefined();

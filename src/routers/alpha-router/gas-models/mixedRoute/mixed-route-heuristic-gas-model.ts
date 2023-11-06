@@ -1,32 +1,30 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { partitionMixedRouteByProtocol } from '@uniswap/router-sdk';
-import { ChainId } from '@uniswap/sdk-core';
-import { Pair } from '@uniswap/v2-sdk';
-import { Pool } from '@uniswap/v3-sdk';
+import { partitionMixedRouteByProtocol } from '@hitesh.sharma_/router-sdk';
+import { ChainId } from '@hitesh.sharma_/sdk-core';
+import { Pair } from '@hitesh.sharma_/v2-sdk';
+import { Pool } from '@hitesh.sharma_/v3-sdk';
 import JSBI from 'jsbi';
 import _ from 'lodash';
 
 import { WRAPPED_NATIVE_CURRENCY } from '../../../..';
 import { log } from '../../../../util';
 import { CurrencyAmount } from '../../../../util/amounts';
-import {
-  getV2NativePool,
-} from '../../../../util/gas-factory-helpers';
+import { getV2NativePool } from '../../../../util/gas-factory-helpers';
 import { MixedRouteWithValidQuote } from '../../entities/route-with-valid-quote';
 import {
   BuildOnChainGasModelFactoryType,
   IGasModel,
-  IOnChainGasModelFactory,
+  IOnChainGasModelFactory
 } from '../gas-model';
 import {
   BASE_SWAP_COST as BASE_SWAP_COST_V2,
-  COST_PER_EXTRA_HOP as COST_PER_EXTRA_HOP_V2,
+  COST_PER_EXTRA_HOP as COST_PER_EXTRA_HOP_V2
 } from '../v2/v2-heuristic-gas-model';
 import {
   BASE_SWAP_COST,
   COST_PER_HOP,
   COST_PER_INIT_TICK,
-  COST_PER_UNINIT_TICK,
+  COST_PER_UNINIT_TICK
 } from '../v3/gas-costs';
 
 /**
@@ -57,11 +55,11 @@ export class MixedRouteHeuristicGasModelFactory extends IOnChainGasModelFactory 
     gasPriceWei,
     pools,
     quoteToken,
-    v2poolProvider: V2poolProvider,
+    v2poolProvider: V2poolProvider
   }: BuildOnChainGasModelFactoryType): Promise<
     IGasModel<MixedRouteWithValidQuote>
   > {
-    const usdPool: Pool = pools.usdPool
+    const usdPool: Pool = pools.usdPool;
 
     // If our quote token is WETH, we don't need to convert our gas use to be in terms
     // of the quote token in order to produce a gas adjusted amount.
@@ -94,18 +92,18 @@ export class MixedRouteHeuristicGasModelFactory extends IOnChainGasModelFactory 
         return {
           gasEstimate: baseGasUse,
           gasCostInToken: totalGasCostNativeCurrency,
-          gasCostInUSD: gasCostInTermsOfUSD,
+          gasCostInUSD: gasCostInTermsOfUSD
         };
       };
 
       return {
-        estimateGasCost,
+        estimateGasCost
       };
     }
 
     // If the quote token is not in the native currency, we convert the gas cost to be in terms of the quote token.
     // We do this by getting the highest liquidity <quoteToken>/<nativeCurrency> pool. eg. <quoteToken>/ETH pool.
-    const nativeV3Pool: Pool | null = pools.nativeQuoteTokenV3Pool
+    const nativeV3Pool: Pool | null = pools.nativeQuoteTokenV3Pool;
 
     let nativeV2Pool: Pair | null;
     if (V2poolProvider) {
@@ -138,7 +136,7 @@ export class MixedRouteHeuristicGasModelFactory extends IOnChainGasModelFactory 
         return {
           gasEstimate: baseGasUse,
           gasCostInToken: CurrencyAmount.fromRawAmount(quoteToken, 0),
-          gasCostInUSD: CurrencyAmount.fromRawAmount(usdToken, 0),
+          gasCostInUSD: CurrencyAmount.fromRawAmount(usdToken, 0)
         };
       }
 
@@ -168,7 +166,7 @@ export class MixedRouteHeuristicGasModelFactory extends IOnChainGasModelFactory 
           {
             nativeTokenPriceBase: nativeTokenPrice.baseCurrency,
             nativeTokenPriceQuote: nativeTokenPrice.quoteCurrency,
-            gasCostInEth: totalGasCostNativeCurrency.currency,
+            gasCostInEth: totalGasCostNativeCurrency.currency
           },
           'Debug eth price token issue'
         );
@@ -193,7 +191,7 @@ export class MixedRouteHeuristicGasModelFactory extends IOnChainGasModelFactory 
           {
             usdT1: usdPool.token0.symbol,
             usdT2: usdPool.token1.symbol,
-            gasCostInNativeToken: totalGasCostNativeCurrency.currency.symbol,
+            gasCostInNativeToken: totalGasCostNativeCurrency.currency.symbol
           },
           'Failed to compute USD gas price'
         );
@@ -203,12 +201,12 @@ export class MixedRouteHeuristicGasModelFactory extends IOnChainGasModelFactory 
       return {
         gasEstimate: baseGasUse,
         gasCostInToken: gasCostInTermsOfQuoteToken,
-        gasCostInUSD: gasCostInTermsOfUSD!,
+        gasCostInUSD: gasCostInTermsOfUSD!
       };
     };
 
     return {
-      estimateGasCost: estimateGasCost.bind(this),
+      estimateGasCost: estimateGasCost.bind(this)
     };
   }
 
@@ -262,7 +260,7 @@ export class MixedRouteHeuristicGasModelFactory extends IOnChainGasModelFactory 
     return {
       totalGasCostNativeCurrency,
       totalInitializedTicksCrossed,
-      baseGasUse,
+      baseGasUse
     };
   }
 }

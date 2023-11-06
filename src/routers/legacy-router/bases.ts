@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
 
 import {
   BTC_BNB,
@@ -16,8 +16,7 @@ import {
   USDT_MAINNET,
   WBTC_MAINNET,
   WMATIC_POLYGON,
-  WMATIC_POLYGON_MUMBAI,
-
+  WMATIC_POLYGON_MUMBAI
 } from '../../providers/token-provider';
 import { WRAPPED_NATIVE_CURRENCY } from '../../util/chains';
 
@@ -34,17 +33,17 @@ export const BASES_TO_CHECK_TRADES_AGAINST = (
       DAI_MAINNET,
       USDC_MAINNET,
       USDT_MAINNET,
-      WBTC_MAINNET,
+      WBTC_MAINNET
     ],
     [ChainId.GOERLI]: [WRAPPED_NATIVE_CURRENCY[ChainId.GOERLI]!],
     [ChainId.SEPOLIA]: [WRAPPED_NATIVE_CURRENCY[ChainId.SEPOLIA]!],
     [ChainId.OPTIMISM]: [WRAPPED_NATIVE_CURRENCY[ChainId.OPTIMISM]!],
     [ChainId.OPTIMISM_GOERLI]: [
-      WRAPPED_NATIVE_CURRENCY[ChainId.OPTIMISM_GOERLI]!,
+      WRAPPED_NATIVE_CURRENCY[ChainId.OPTIMISM_GOERLI]!
     ],
     [ChainId.ARBITRUM_ONE]: [WRAPPED_NATIVE_CURRENCY[ChainId.ARBITRUM_ONE]!],
     [ChainId.ARBITRUM_GOERLI]: [
-      WRAPPED_NATIVE_CURRENCY[ChainId.ARBITRUM_GOERLI]!,
+      WRAPPED_NATIVE_CURRENCY[ChainId.ARBITRUM_GOERLI]!
     ],
     [ChainId.POLYGON]: [WMATIC_POLYGON],
     [ChainId.POLYGON_MUMBAI]: [WMATIC_POLYGON_MUMBAI],
@@ -58,11 +57,15 @@ export const BASES_TO_CHECK_TRADES_AGAINST = (
       DAI_BNB,
       USDC_BNB,
       USDT_BNB,
-      BTC_BNB,
+      BTC_BNB
     ],
-    [ChainId.AVALANCHE]: [WRAPPED_NATIVE_CURRENCY[ChainId.AVALANCHE]!, USDC_AVAX, DAI_AVAX],
+    [ChainId.AVALANCHE]: [
+      WRAPPED_NATIVE_CURRENCY[ChainId.AVALANCHE]!,
+      USDC_AVAX,
+      DAI_AVAX
+    ],
     [ChainId.BASE]: [WRAPPED_NATIVE_CURRENCY[ChainId.BASE]!, USDC_BASE],
-    [ChainId.BASE_GOERLI]: [WRAPPED_NATIVE_CURRENCY[ChainId.BASE_GOERLI]!],
+    [ChainId.BASE_GOERLI]: [WRAPPED_NATIVE_CURRENCY[ChainId.BASE_GOERLI]!]
   };
 };
 
@@ -78,7 +81,7 @@ const getBasePairByAddress = async (
   if (!toToken) return {};
 
   return {
-    [fromAddress]: [toToken],
+    [fromAddress]: [toToken]
   };
 };
 
@@ -136,8 +139,8 @@ export const ADDITIONAL_BASES = async (
         ChainId.MAINNET,
         '0xeb4c2781e4eba804ce9a9803c67d0893436bb27d',
         '0x2260fac5e5542a773aa44fbcfedf7c193bc2c599'
-      )),
-    },
+      ))
+    }
   };
 };
 
@@ -163,7 +166,7 @@ export const CUSTOM_BASES = async (
         ChainId.MAINNET,
         '0xd46ba6d942050d489dbd938a2c909a5d5039a161',
         WRAPPED_NATIVE_CURRENCY[1]!.address
-      )),
-    },
+      ))
+    }
   };
 };

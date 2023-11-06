@@ -1,4 +1,4 @@
-import { ChainId, Currency, Ether } from '@uniswap/sdk-core';
+import { ChainId, Currency, Ether } from '@hitesh.sharma_/sdk-core';
 import {
   CEUR_CELO,
   CEUR_CELO_ALFAJORES,
@@ -13,7 +13,7 @@ import {
   USDC_ON,
   USDT_MAINNET,
   WETH9,
-  WNATIVE_ON,
+  WNATIVE_ON
 } from '../../src';
 
 export const WHALES = (token: Currency): string => {

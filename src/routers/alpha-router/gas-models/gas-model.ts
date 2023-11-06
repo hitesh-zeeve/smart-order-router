@@ -1,6 +1,6 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Token } from '@uniswap/sdk-core';
-import { Pool } from '@uniswap/v3-sdk';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
+import { Pool } from '@hitesh.sharma_/v3-sdk';
 
 import { ProviderConfig } from '../../../providers/provider';
 import {
@@ -34,20 +34,23 @@ import {
   USDT_MAINNET,
   USDT_OPTIMISM,
   USDT_OPTIMISM_GOERLI,
-  WBTC_GOERLI,
+  WBTC_GOERLI
 } from '../../../providers/token-provider';
 import { IV2PoolProvider } from '../../../providers/v2/pool-provider';
-import { ArbitrumGasData, IL2GasDataProvider, OptimismGasData, } from '../../../providers/v3/gas-data-provider';
+import {
+  ArbitrumGasData,
+  IL2GasDataProvider,
+  OptimismGasData
+} from '../../../providers/v3/gas-data-provider';
 import { CurrencyAmount } from '../../../util/amounts';
 import {
   MixedRouteWithValidQuote,
   RouteWithValidQuote,
   V2RouteWithValidQuote,
-  V3RouteWithValidQuote,
+  V3RouteWithValidQuote
 } from '../entities/route-with-valid-quote';
 
-
-// When adding new usd gas tokens, ensure the tokens are ordered 
+// When adding new usd gas tokens, ensure the tokens are ordered
 // from tokens with highest decimals to lowest decimals. For example,
 // DAI_AVAX has 18 decimals and comes before USDC_AVAX which has 6 decimals.
 export const usdGasTokensByChain: { [chainId in ChainId]?: Token[] } = {
@@ -57,7 +60,7 @@ export const usdGasTokensByChain: { [chainId in ChainId]?: Token[] } = {
   [ChainId.OPTIMISM_GOERLI]: [
     DAI_OPTIMISM_GOERLI,
     USDC_OPTIMISM_GOERLI,
-    USDT_OPTIMISM_GOERLI,
+    USDT_OPTIMISM_GOERLI
   ],
   [ChainId.ARBITRUM_GOERLI]: [USDC_ARBITRUM_GOERLI],
   [ChainId.GOERLI]: [DAI_GOERLI, USDC_GOERLI, USDT_GOERLI, WBTC_GOERLI],
@@ -70,7 +73,7 @@ export const usdGasTokensByChain: { [chainId in ChainId]?: Token[] } = {
   [ChainId.MOONBEAM]: [USDC_MOONBEAM],
   [ChainId.BNB]: [USDT_BNB, USDC_BNB, DAI_BNB],
   [ChainId.AVALANCHE]: [DAI_AVAX, USDC_AVAX],
-  [ChainId.BASE]: [USDC_BASE],
+  [ChainId.BASE]: [USDC_BASE]
 };
 
 export type L1ToL2GasCosts = {
@@ -100,10 +103,10 @@ export type BuildV2GasModelFactoryType = {
 };
 
 export type LiquidityCalculationPools = {
-  usdPool: Pool
-  nativeQuoteTokenV3Pool: Pool | null
-  nativeAmountTokenV3Pool: Pool | null
-}
+  usdPool: Pool;
+  nativeQuoteTokenV3Pool: Pool | null;
+  nativeAmountTokenV3Pool: Pool | null;
+};
 
 /**
  * Contains functions for generating gas estimates for given routes.
@@ -146,7 +149,7 @@ export abstract class IV2GasModelFactory {
     chainId,
     gasPriceWei,
     poolProvider,
-    token,
+    token
   }: BuildV2GasModelFactoryType): Promise<IGasModel<V2RouteWithValidQuote>>;
 }
 
@@ -169,7 +172,7 @@ export abstract class IOnChainGasModelFactory {
     amountToken,
     quoteToken,
     v2poolProvider: V2poolProvider,
-    l2GasDataProvider,
+    l2GasDataProvider
   }: BuildOnChainGasModelFactoryType): Promise<
     IGasModel<V3RouteWithValidQuote | MixedRouteWithValidQuote>
   >;

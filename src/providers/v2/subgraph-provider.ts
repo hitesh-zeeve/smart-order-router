@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
 import retry from 'async-retry';
 import Timeout from 'await-timeout';
 import { gql, GraphQLClient } from 'graphql-request';
@@ -37,7 +37,7 @@ type RawV2SubgraphPool = {
 
 const SUBGRAPH_URL_BY_CHAIN: { [chainId in ChainId]?: string } = {
   [ChainId.MAINNET]:
-    'https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v2-dev',
+    'https://api.thegraph.com/subgraphs/name/ianlapham/uniswap-v2-dev'
 };
 
 const threshold = 0.025;
@@ -127,7 +127,7 @@ export class V2SubgraphProvider implements IV2SubgraphProvider {
                   pairs: RawV2SubgraphPool[];
                 }>(query2, {
                   pageSize: this.pageSize,
-                  id: lastId,
+                  id: lastId
                 });
 
                 pairsPage = poolsResult.pairs;
@@ -143,7 +143,7 @@ export class V2SubgraphProvider implements IV2SubgraphProvider {
                     { err },
                     `Failed request for page of pools from subgraph. Retry attempt: ${retry}`
                   );
-                },
+                }
               }
             );
           } while (pairsPage.length > 0);
@@ -186,7 +186,7 @@ export class V2SubgraphProvider implements IV2SubgraphProvider {
             { err },
             `Failed to get pools from subgraph. Retry attempt: ${retry}`
           );
-        },
+        }
       }
     );
 
@@ -211,14 +211,14 @@ export class V2SubgraphProvider implements IV2SubgraphProvider {
           ...pool,
           id: pool.id.toLowerCase(),
           token0: {
-            id: pool.token0.id.toLowerCase(),
+            id: pool.token0.id.toLowerCase()
           },
           token1: {
-            id: pool.token1.id.toLowerCase(),
+            id: pool.token1.id.toLowerCase()
           },
           supply: parseFloat(pool.totalSupply),
           reserve: parseFloat(pool.trackedReserveETH),
-          reserveUSD: parseFloat(pool.reserveUSD),
+          reserveUSD: parseFloat(pool.reserveUSD)
         };
       });
 

@@ -4,8 +4,13 @@ import { JsonRpcProvider } from '@ethersproject/providers';
 import { Command, flags } from '@oclif/command';
 import { ParserOutput } from '@oclif/parser/lib/parse';
 import DEFAULT_TOKEN_LIST from '@uniswap/default-token-list';
-import { ChainId, Currency, CurrencyAmount, Token } from '@uniswap/sdk-core';
-import { MethodParameters } from '@uniswap/v3-sdk';
+import {
+  ChainId,
+  Currency,
+  CurrencyAmount,
+  Token
+} from '@hitesh.sharma_/sdk-core';
+import { MethodParameters } from '@hitesh.sharma_/v3-sdk';
 import bunyan, { default as Logger } from 'bunyan';
 import bunyanDebugStream from 'bunyan-debug-stream';
 import _ from 'lodash';
@@ -43,7 +48,7 @@ import {
   UniswapMulticallProvider,
   V2PoolProvider,
   V3PoolProvider,
-  V3RouteWithValidQuote,
+  V3RouteWithValidQuote
 } from '../src';
 import { LegacyGasPriceProvider } from '../src/providers/legacy-gas-price-provider';
 import { OnChainGasPriceProvider } from '../src/providers/on-chain-gas-price-provider';
@@ -52,68 +57,68 @@ export abstract class BaseCommand extends Command {
   static flags = {
     topN: flags.integer({
       required: false,
-      default: 3,
+      default: 3
     }),
     topNTokenInOut: flags.integer({
       required: false,
-      default: 2,
+      default: 2
     }),
     topNSecondHop: flags.integer({
       required: false,
-      default: 2,
+      default: 2
     }),
     topNSecondHopForTokenAddressRaw: flags.string({
       required: false,
-      default: '',
+      default: ''
     }),
     topNWithEachBaseToken: flags.integer({
       required: false,
-      default: 2,
+      default: 2
     }),
     topNWithBaseToken: flags.integer({
       required: false,
-      default: 6,
+      default: 6
     }),
     topNWithBaseTokenInSet: flags.boolean({
       required: false,
-      default: false,
+      default: false
     }),
     topNDirectSwaps: flags.integer({
       required: false,
-      default: 2,
+      default: 2
     }),
     maxSwapsPerPath: flags.integer({
       required: false,
-      default: 3,
+      default: 3
     }),
     minSplits: flags.integer({
       required: false,
-      default: 1,
+      default: 1
     }),
     maxSplits: flags.integer({
       required: false,
-      default: 3,
+      default: 3
     }),
     distributionPercent: flags.integer({
       required: false,
-      default: 5,
+      default: 5
     }),
     chainId: flags.integer({
       char: 'c',
       required: false,
       default: ChainId.MAINNET,
-      options: CHAIN_IDS_LIST,
+      options: CHAIN_IDS_LIST
     }),
     tokenListURI: flags.string({
-      required: false,
+      required: false
     }),
     router: flags.string({
       char: 's',
       required: false,
-      default: 'alpha',
+      default: 'alpha'
     }),
     debug: flags.boolean(),
-    debugJSON: flags.boolean(),
+    debugJSON: flags.boolean()
   };
 
   private _log: Logger | null = null;
@@ -128,8 +133,8 @@ export abstract class BaseCommand extends Command {
     return this._log
       ? this._log
       : bunyan.createLogger({
-        name: 'Default Logger',
-      });
+          name: 'Default Logger'
+        });
   }
 
   get router() {
@@ -187,7 +192,7 @@ export abstract class BaseCommand extends Command {
       router: routerStr,
       debug,
       debugJSON,
-      tokenListURI,
+      tokenListURI
     } = query.flags;
 
     // initialize logger
@@ -199,19 +204,19 @@ export abstract class BaseCommand extends Command {
       streams: debugJSON
         ? undefined
         : [
-          {
-            level: logLevel,
-            type: 'stream',
-            stream: bunyanDebugStream({
-              basepath: __dirname,
-              forceColor: false,
-              showDate: false,
-              showPid: false,
-              showLoggerName: false,
-              showLevel: !!debug,
-            }),
-          },
-        ],
+            {
+              level: logLevel,
+              type: 'stream',
+              stream: bunyanDebugStream({
+                basepath: __dirname,
+                forceColor: false,
+                showDate: false,
+                showPid: false,
+                showLoggerName: false,
+                showLevel: !!debug
+              })
+            }
+          ]
     });
 
     if (debug || debugJSON) {
@@ -223,7 +228,7 @@ export abstract class BaseCommand extends Command {
 
     const metricLogger: MetricLogger = new MetricLogger({
       chainId: chainIdNumb,
-      networkName: ID_TO_NETWORK_NAME(chainId),
+      networkName: ID_TO_NETWORK_NAME(chainId)
     });
     setGlobalMetric(metricLogger);
 
@@ -272,7 +277,7 @@ export abstract class BaseCommand extends Command {
           provider,
           multicall2Provider
         ),
-        tokenProvider: this.tokenProvider,
+        tokenProvider: this.tokenProvider
       });
     } else {
       const gasPriceCache = new NodeJSCache<GasPrice>(
@@ -325,7 +330,7 @@ export abstract class BaseCommand extends Command {
           ),
           gasPriceCache
         ),
-        simulator,
+        simulator
       });
 
       this._swapToRatioRouter = router;
@@ -375,7 +380,7 @@ export abstract class BaseCommand extends Command {
       blockNumber: blockNumber.toString(),
       estimatedGasUsed: estimatedGasUsed.toString(),
       gasPriceWei: gasPriceWei.toString(),
-      simulationStatus: simulationStatus,
+      simulationStatus: simulationStatus
     });
 
     const v3Routes: V3RouteWithValidQuote[] =

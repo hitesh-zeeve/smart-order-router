@@ -1,14 +1,14 @@
 import { Logger } from '@ethersproject/logger';
 import { flags } from '@oclif/command';
-import { Currency, Ether, Fraction, Percent } from '@uniswap/sdk-core';
-import { Position } from '@uniswap/v3-sdk';
+import { Currency, Ether, Fraction, Percent } from '@hitesh.sharma_/sdk-core';
+import { Position } from '@hitesh.sharma_/v3-sdk';
 import dotenv from 'dotenv';
 import {
   ID_TO_CHAIN_ID,
   parseAmount,
   SwapToRatioResponse,
   SwapToRatioStatus,
-  SwapType,
+  SwapType
 } from '../../src';
 import { BaseCommand } from '../base-command';
 
@@ -31,7 +31,7 @@ export class QuoteToRatio extends BaseCommand {
     token1Balance: flags.string({ required: true }),
     recipient: flags.string({ required: true }),
     tickLower: flags.integer({ required: true }),
-    tickUpper: flags.integer({ required: true }),
+    tickUpper: flags.integer({ required: true })
   };
 
   async run() {
@@ -56,7 +56,7 @@ export class QuoteToRatio extends BaseCommand {
       maxSwapsPerPath,
       minSplits,
       maxSplits,
-      distributionPercent,
+      distributionPercent
     } = flags;
 
     const log = this.logger;
@@ -102,7 +102,7 @@ export class QuoteToRatio extends BaseCommand {
       pool,
       tickUpper,
       tickLower,
-      liquidity: 1,
+      liquidity: 1
     });
 
     let swapRoutes: SwapToRatioResponse;
@@ -112,18 +112,18 @@ export class QuoteToRatio extends BaseCommand {
       position,
       {
         ratioErrorTolerance: new Fraction(1, 100),
-        maxIterations: 6,
+        maxIterations: 6
       },
       {
         addLiquidityOptions: {
-          recipient: '0x0000000000000000000000000000000000000001',
+          recipient: '0x0000000000000000000000000000000000000001'
         },
         swapOptions: {
           type: SwapType.SWAP_ROUTER_02,
           deadline: 100,
           recipient,
-          slippageTolerance: new Percent(5, 10_000),
-        },
+          slippageTolerance: new Percent(5, 10_000)
+        }
       },
       {
         blockNumber: this.blockNumber,
@@ -136,7 +136,7 @@ export class QuoteToRatio extends BaseCommand {
         maxSwapsPerPath,
         minSplits,
         maxSplits,
-        distributionPercent,
+        distributionPercent
       }
     );
 
@@ -150,7 +150,7 @@ export class QuoteToRatio extends BaseCommand {
         methodParameters,
         quote,
         quoteGasAdjusted,
-        route: routeAmounts,
+        route: routeAmounts
       } = swapRoutes.result;
 
       this.logSwapResults(

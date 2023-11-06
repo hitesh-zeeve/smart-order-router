@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
 import retry from 'async-retry';
 import Timeout from 'await-timeout';
 import { gql, GraphQLClient } from 'graphql-request';
@@ -61,8 +61,8 @@ const SUBGRAPH_URL_BY_CHAIN: { [chainId in ChainId]?: string } = {
     'https://api.thegraph.com/subgraphs/name/ilyamk/uniswap-v3---bnb-chain',
   [ChainId.AVALANCHE]:
     'https://api.thegraph.com/subgraphs/name/lynnshaoyu/uniswap-v3-avax',
-  [ChainId.BASE]: 
-    'https://api.studio.thegraph.com/query/48211/uniswap-v3-base/v0.0.1',
+  [ChainId.BASE]:
+    'https://api.studio.thegraph.com/query/48211/uniswap-v3-base/v0.0.1'
 };
 
 const PAGE_SIZE = 1000; // 1k is max possible query size from subgraph.
@@ -154,7 +154,7 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
               pools: RawV3SubgraphPool[];
             }>(query, {
               pageSize: PAGE_SIZE,
-              id: lastId,
+              id: lastId
             });
 
             poolsPage = poolsResult.pools;
@@ -202,7 +202,7 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
             { err },
             `Failed to get pools from subgraph. Retry attempt: ${retry}`
           );
-        },
+        }
       }
     );
 
@@ -219,13 +219,13 @@ export class V3SubgraphProvider implements IV3SubgraphProvider {
           ...rest,
           id: pool.id.toLowerCase(),
           token0: {
-            id: pool.token0.id.toLowerCase(),
+            id: pool.token0.id.toLowerCase()
           },
           token1: {
-            id: pool.token1.id.toLowerCase(),
+            id: pool.token1.id.toLowerCase()
           },
           tvlETH: parseFloat(totalValueLockedETH),
-          tvlUSD: parseFloat(totalValueLockedUSD),
+          tvlUSD: parseFloat(totalValueLockedUSD)
         };
       });
 

@@ -1,4 +1,4 @@
-import { ChainId, Token } from '@uniswap/sdk-core';
+import { ChainId, Token } from '@hitesh.sharma_/sdk-core';
 import _ from 'lodash';
 
 import { log, WRAPPED_NATIVE_CURRENCY } from '../util';
@@ -48,7 +48,7 @@ import {
   WBTC_OPTIMISM,
   WBTC_OPTIMISM_GOERLI,
   WMATIC_POLYGON,
-  WMATIC_POLYGON_MUMBAI,
+  WMATIC_POLYGON_MUMBAI
 } from './token-provider';
 
 // These tokens will added to the Token cache on initialization.
@@ -70,61 +70,61 @@ export const CACHE_SEED_TOKENS: {
       18,
       'RING',
       'RING'
-    ),
+    )
   },
   [ChainId.SEPOLIA]: {
-    USDC: USDC_SEPOLIA,
+    USDC: USDC_SEPOLIA
   },
   [ChainId.OPTIMISM]: {
     USDC: USDC_OPTIMISM,
     USDT: USDT_OPTIMISM,
     WBTC: WBTC_OPTIMISM,
-    DAI: DAI_OPTIMISM,
+    DAI: DAI_OPTIMISM
   },
   [ChainId.OPTIMISM_GOERLI]: {
     USDC: USDC_OPTIMISM_GOERLI,
     USDT: USDT_OPTIMISM_GOERLI,
     WBTC: WBTC_OPTIMISM_GOERLI,
-    DAI: DAI_OPTIMISM_GOERLI,
+    DAI: DAI_OPTIMISM_GOERLI
   },
   [ChainId.ARBITRUM_ONE]: {
     USDC: USDC_ARBITRUM,
     USDT: USDT_ARBITRUM,
     WBTC: WBTC_ARBITRUM,
-    DAI: DAI_ARBITRUM,
+    DAI: DAI_ARBITRUM
   },
   [ChainId.ARBITRUM_GOERLI]: {
-    USDC: USDC_ARBITRUM_GOERLI,
+    USDC: USDC_ARBITRUM_GOERLI
   },
   [ChainId.POLYGON]: {
     WMATIC: WMATIC_POLYGON,
-    USDC: USDC_POLYGON,
+    USDC: USDC_POLYGON
   },
   [ChainId.POLYGON_MUMBAI]: {
     WMATIC: WMATIC_POLYGON_MUMBAI,
-    DAI: DAI_POLYGON_MUMBAI,
+    DAI: DAI_POLYGON_MUMBAI
   },
   [ChainId.CELO]: {
     CELO: CELO,
     CUSD: CUSD_CELO,
     CEUR: CEUR_CELO,
-    DAI: DAI_CELO,
+    DAI: DAI_CELO
   },
   [ChainId.CELO_ALFAJORES]: {
     CELO: CELO_ALFAJORES,
     CUSD: CUSD_CELO_ALFAJORES,
     CEUR: CUSD_CELO_ALFAJORES,
-    DAI: DAI_CELO_ALFAJORES,
+    DAI: DAI_CELO_ALFAJORES
   },
   [ChainId.GNOSIS]: {
     WXDAI: WRAPPED_NATIVE_CURRENCY[ChainId.GNOSIS],
-    USDC_ETHEREUM_GNOSIS: USDC_ETHEREUM_GNOSIS,
+    USDC_ETHEREUM_GNOSIS: USDC_ETHEREUM_GNOSIS
   },
   [ChainId.MOONBEAM]: {
     USDC: USDC_MOONBEAM,
     DAI: DAI_MOONBEAM,
     WBTC: WBTC_MOONBEAM,
-    WGLMR: WRAPPED_NATIVE_CURRENCY[ChainId.MOONBEAM],
+    WGLMR: WRAPPED_NATIVE_CURRENCY[ChainId.MOONBEAM]
   },
   [ChainId.BNB]: {
     USDC: USDC_BNB,
@@ -133,16 +133,16 @@ export const CACHE_SEED_TOKENS: {
     ETH: ETH_BNB,
     DAI: DAI_BNB,
     BTC: BTC_BNB,
-    WBNB: WRAPPED_NATIVE_CURRENCY[ChainId.BNB],
+    WBNB: WRAPPED_NATIVE_CURRENCY[ChainId.BNB]
   },
   [ChainId.AVALANCHE]: {
     USDC: USDC_AVAX,
     DAI: DAI_AVAX,
-    WAVAX: WRAPPED_NATIVE_CURRENCY[ChainId.AVALANCHE],
+    WAVAX: WRAPPED_NATIVE_CURRENCY[ChainId.AVALANCHE]
   },
   [ChainId.BASE]: {
     USDC: USDC_BASE,
-    WETH: WRAPPED_NATIVE_CURRENCY[ChainId.BASE],
+    WETH: WRAPPED_NATIVE_CURRENCY[ChainId.BASE]
   }
   // Currently we do not have providers for Moonbeam mainnet or Gnosis testnet
 };
@@ -273,7 +273,7 @@ export class CachingTokenProviderWithFallback implements ITokenProvider {
       },
       getAllTokens: (): Token[] => {
         return Object.values(addressToToken);
-      },
+      }
     };
   }
 }

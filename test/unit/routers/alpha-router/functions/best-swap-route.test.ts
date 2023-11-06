@@ -1,7 +1,7 @@
 import { BigNumber } from '@ethersproject/bignumber';
-import { ChainId, Fraction, TradeType } from '@uniswap/sdk-core';
-import { Pair } from '@uniswap/v2-sdk';
-import { Pool } from '@uniswap/v3-sdk';
+import { ChainId, Fraction, TradeType } from '@hitesh.sharma_/sdk-core';
+import { Pair } from '@hitesh.sharma_/v2-sdk';
+import { Pool } from '@hitesh.sharma_/v3-sdk';
 import JSBI from 'jsbi';
 import _ from 'lodash';
 import sinon from 'sinon';
@@ -16,7 +16,7 @@ import {
   V3PoolProvider,
   V3Route,
   V3RouteWithValidQuote,
-  WRAPPED_NATIVE_CURRENCY,
+  WRAPPED_NATIVE_CURRENCY
 } from '../../../../../src';
 import { V2PoolProvider } from '../../../../../src/providers/v2/pool-provider';
 import { getBestSwapRoute } from '../../../../../src/routers/alpha-router/functions/best-swap-route';
@@ -37,7 +37,7 @@ import {
   WBTC_WETH,
   WBTC_WETH_MEDIUM,
   WETH9_USDT_LOW,
-  WETH_USDT,
+  WETH_USDT
 } from '../../../../test-util/mock-data';
 
 const v3Route1 = new V3Route(
@@ -78,7 +78,7 @@ const mockPools = [
   WBTC_USDT_MEDIUM,
   WBTC_WETH_MEDIUM,
   USDC_WETH_LOW,
-  USDC_WETH_MEDIUM,
+  USDC_WETH_MEDIUM
 ];
 
 describe('get best swap route', () => {
@@ -98,17 +98,17 @@ describe('get best swap route', () => {
     mockPoolProvider.getPoolAddress.callsFake((tA, tB, fee) => ({
       poolAddress: Pool.getAddress(tA, tB, fee),
       token0: tA,
-      token1: tB,
+      token1: tB
     }));
 
     mockV3GasModel = {
-      estimateGasCost: sinon.stub(),
+      estimateGasCost: sinon.stub()
     };
     mockV3GasModel.estimateGasCost.callsFake((r) => {
       return {
         gasEstimate: BigNumber.from(10000),
         gasCostInToken: CurrencyAmount.fromRawAmount(r.quoteToken, 0),
-        gasCostInUSD: CurrencyAmount.fromRawAmount(USDC, 0),
+        gasCostInUSD: CurrencyAmount.fromRawAmount(USDC, 0)
       };
     });
 
@@ -118,13 +118,13 @@ describe('get best swap route', () => {
       USDC_DAI_MEDIUM,
       USDC_WETH_LOW,
       WETH9_USDT_LOW,
-      DAI_USDT_LOW,
+      DAI_USDT_LOW
     ];
     mockV3PoolProvider.getPools.resolves(buildMockV3PoolAccessor(v3MockPools));
     mockV3PoolProvider.getPoolAddress.callsFake((tA, tB, fee) => ({
       poolAddress: Pool.getAddress(tA, tB, fee),
       token0: tA,
-      token1: tB,
+      token1: tB
     }));
 
     const v2MockPools = [DAI_USDT, USDC_WETH, WETH_USDT, USDC_DAI, WBTC_WETH];
@@ -133,17 +133,17 @@ describe('get best swap route', () => {
     mockV2PoolProvider.getPoolAddress.callsFake((tA, tB) => ({
       poolAddress: Pair.getAddress(tA, tB),
       token0: tA,
-      token1: tB,
+      token1: tB
     }));
 
     mockV2GasModel = {
-      estimateGasCost: sinon.stub(),
+      estimateGasCost: sinon.stub()
     };
     mockV2GasModel.estimateGasCost.callsFake((r: V2RouteWithValidQuote) => {
       return {
         gasEstimate: BigNumber.from(10000),
         gasCostInToken: CurrencyAmount.fromRawAmount(r.quoteToken, 0),
-        gasCostInUSD: CurrencyAmount.fromRawAmount(USDC, 0),
+        gasCostInUSD: CurrencyAmount.fromRawAmount(USDC, 0)
       };
     });
   });
@@ -168,7 +168,7 @@ describe('get best swap route', () => {
       gasModel: mockV3GasModel,
       quoteToken,
       tradeType,
-      v3PoolProvider: mockV3PoolProvider,
+      v3PoolProvider: mockV3PoolProvider
     });
   };
 
@@ -207,7 +207,7 @@ describe('get best swap route', () => {
       gasModel: mockV2GasModel,
       quoteToken,
       tradeType,
-      v2PoolProvider: mockV2PoolProvider,
+      v2PoolProvider: mockV2PoolProvider
     });
   };
 
@@ -253,7 +253,7 @@ describe('get best swap route', () => {
         amount,
         [14, 19, 23, 60],
         percents
-      ),
+      )
     ];
 
     const swapRouteType = await getBestSwapRoute(
@@ -271,7 +271,7 @@ describe('get best swap route', () => {
       quoteGasAdjusted,
       estimatedGasUsed,
       estimatedGasUsedUSD,
-      estimatedGasUsedQuoteToken,
+      estimatedGasUsedQuoteToken
     } = swapRouteType!;
 
     expect(quote.quotient.toString()).toBe('60');
@@ -313,7 +313,7 @@ describe('get best swap route', () => {
         amount,
         [14, 19, 23, 30],
         percents
-      ),
+      )
     ];
 
     const swapRouteType = await getBestSwapRoute(
@@ -331,7 +331,7 @@ describe('get best swap route', () => {
       quoteGasAdjusted,
       estimatedGasUsed,
       estimatedGasUsedUSD,
-      estimatedGasUsedQuoteToken,
+      estimatedGasUsedQuoteToken
     } = swapRouteType!;
 
     expect(quote.quotient.toString()).toBe('44');
@@ -373,7 +373,7 @@ describe('get best swap route', () => {
         amount,
         [25, 10, 10, 10],
         percents
-      ),
+      )
     ];
 
     const swapRouteType = await getBestSwapRoute(
@@ -391,7 +391,7 @@ describe('get best swap route', () => {
       quoteGasAdjusted,
       estimatedGasUsed,
       estimatedGasUsedUSD,
-      estimatedGasUsedQuoteToken,
+      estimatedGasUsedQuoteToken
     } = swapRouteType!;
 
     expect(quote.quotient.toString()).toBe('100');
@@ -440,7 +440,7 @@ describe('get best swap route', () => {
         amount,
         [40, 42, 44, 56],
         percents
-      ),
+      )
     ];
 
     const swapRouteType = await getBestSwapRoute(
@@ -458,7 +458,7 @@ describe('get best swap route', () => {
       quoteGasAdjusted,
       estimatedGasUsed,
       estimatedGasUsedUSD,
-      estimatedGasUsedQuoteToken,
+      estimatedGasUsedQuoteToken
     } = swapRouteType!;
 
     expect(quote.quotient.toString()).toBe('140');
@@ -509,7 +509,7 @@ describe('get best swap route', () => {
         amount,
         [10, 10, 10, 900],
         percents
-      ),
+      )
     ];
 
     const swapRouteType = await getBestSwapRoute(
@@ -527,7 +527,7 @@ describe('get best swap route', () => {
       quoteGasAdjusted,
       estimatedGasUsed,
       estimatedGasUsedUSD,
-      estimatedGasUsedQuoteToken,
+      estimatedGasUsedQuoteToken
     } = swapRouteType!;
 
     expect(quote.quotient.toString()).toBe('1000');
@@ -577,7 +577,7 @@ describe('get best swap route', () => {
         amount,
         [40, 42, 44, 56],
         percents
-      ),
+      )
     ];
 
     const swapRouteType = await getBestSwapRoute(
@@ -595,7 +595,7 @@ describe('get best swap route', () => {
       quoteGasAdjusted,
       estimatedGasUsed,
       estimatedGasUsedUSD,
-      estimatedGasUsedQuoteToken,
+      estimatedGasUsedQuoteToken
     } = swapRouteType!;
 
     expect(quote.quotient.toString()).toBe('3000');
@@ -645,7 +645,7 @@ describe('get best swap route', () => {
         amount,
         [50000, 42, 44, 56],
         percents
-      ),
+      )
     ];
 
     const swapRouteType = await getBestSwapRoute(
@@ -658,7 +658,7 @@ describe('get best swap route', () => {
         ...mockRoutingConfig,
         distributionPercent: 25,
         minSplits: 2,
-        maxSplits: 3,
+        maxSplits: 3
       }
     )!;
 
@@ -668,7 +668,7 @@ describe('get best swap route', () => {
       quoteGasAdjusted,
       estimatedGasUsed,
       estimatedGasUsedUSD,
-      estimatedGasUsedQuoteToken,
+      estimatedGasUsedQuoteToken
     } = swapRouteType!;
 
     expect(quote.quotient.toString()).toBe('110000');
@@ -698,7 +698,7 @@ describe('get best swap route', () => {
         gasCostInUSD: CurrencyAmount.fromRawAmount(
           USDC,
           JSBI.multiply(JSBI.BigInt(10), JSBI.BigInt(hops))
-        ),
+        )
       };
     });
 
@@ -722,7 +722,7 @@ describe('get best swap route', () => {
         amount,
         [10, 50, 10, 85],
         percents
-      ),
+      )
     ];
 
     const swapRouteType = await getBestSwapRoute(
@@ -740,7 +740,7 @@ describe('get best swap route', () => {
       quoteGasAdjusted,
       estimatedGasUsed,
       estimatedGasUsedUSD,
-      estimatedGasUsedQuoteToken,
+      estimatedGasUsedQuoteToken
     } = swapRouteType!;
 
     expect(quote.quotient.toString()).toBe('85');
@@ -769,7 +769,7 @@ describe('get best swap route', () => {
         gasCostInUSD: CurrencyAmount.fromRawAmount(
           DAI_MAINNET,
           JSBI.multiply(JSBI.BigInt(10), JSBI.BigInt(hops))
-        ),
+        )
       };
     });
 
@@ -793,7 +793,7 @@ describe('get best swap route', () => {
         amount,
         [10, 50, 10, 85],
         percents
-      ),
+      )
     ];
 
     const swapRouteType = await getBestSwapRoute(
@@ -811,7 +811,7 @@ describe('get best swap route', () => {
       quoteGasAdjusted,
       estimatedGasUsed,
       estimatedGasUsedUSD,
-      estimatedGasUsedQuoteToken,
+      estimatedGasUsedQuoteToken
     } = swapRouteType!;
 
     expect(quote.quotient.toString()).toBe('85');
